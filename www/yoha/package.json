@@ -1,0 +1,15 @@
+{
+  "private": false,
+  "name": "yoha",
+  "version": "0.0.1\n",
+  "license": "MIT",
+  "homepage": "https://github.com/handtracking-io/yoha",
+  "description": "Fast handtracking for the web.",
+  "keywords": ["handtracking", "hand detection", "hand pose", "hand", "tracking", "ai", "artificial intelligence"],
+  "files": [
+    "dist"
+  ],
+  "browser": "dist/loader.min.js",
+  "types": "dist/loader.min.d.ts",
+  "dependencies": []
+}
