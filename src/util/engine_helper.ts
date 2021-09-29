@@ -1,5 +1,5 @@
-export {IEngine, MediaStreamErrorEnum, EventEnum} from 'yoha'
-import {IEngine, Load, IHandTrackingApi} from 'yoha'
+export {IEngine, MediaStreamErrorEnum, EventEnum} from '@handtracking.io/yoha'
+import {IEngine, Load, IHandTrackingApi} from '@handtracking.io/yoha'
 
 let API : IHandTrackingApi;
 

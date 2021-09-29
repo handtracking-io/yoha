@@ -1,10 +1,10 @@
 {
   "private": false,
-  "name": "yoha",
-  "version": "0.0.1\n",
+  "name": "@handtracking.io/yoha",
+  "version": "0.0.4",
   "license": "MIT",
   "homepage": "https://github.com/handtracking-io/yoha",
-  "description": "Fast handtracking for the web.",
+  "description": "Practical hand tracking engine.",
   "keywords": ["handtracking", "hand detection", "hand pose", "hand", "tracking", "ai", "artificial intelligence"],
   "files": [
     "dist"

@@ -408,11 +408,11 @@ export declare interface IWarmupResult {
  * Also we can inject the engine code as inline script which again simplifies work with web workers
  * since this allows us to easily access the engines code if needed for web workers.
  *
- * @param sdkUrl - (Optional) Overwrites the default URL from which the API is loaded.
+ * @param url - Overwrites the default URL from which the API is loaded.
  * @returns A promise that resolves with the handtracking API.
  *
  */
-export declare function Load(sdkUrl?: string): Promise<IHandTrackingApi>;
+export declare function Load(url: string): Promise<IHandTrackingApi>;
 
 /**
  * @public
