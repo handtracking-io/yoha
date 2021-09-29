@@ -14,8 +14,18 @@
   <li><a href="https://handtracking-io.github.io/yoha">Demo</a> <a href="./tree/master/src/demos/draw/entry.ts">(Code)</a></li>
   <li><a href="./tree/master/docs">Docs</a></li>
 </ul>
-<h2>Description</h2>
 
+<h2>Installation</h2>
+
+`npm install @handtracking.io/yoha`
+
+Please note:
+
+- You need to serve the files from `node_modules/@handtracking.io/yoha`. (<a href="https://github.com/handtracking-io/yoha/blob/572a9d7612c099c34d1a0830dd5710eaf3adb29c/webpack.config.js#L47">Webpack Example</a>)
+- You need to serve your page with https. (<a href="https://github.com/handtracking-io/yoha/blob/572a9d7612c099c34d1a0830dd5710eaf3adb29c/webpack.config.js#L19">Webpack Example</a>)
+- You <i>should</i> use cross-origin isolation as it improves the engine's performance in certain scenarios. (<a href="https://github.com/handtracking-io/yoha/blob/572a9d7612c099c34d1a0830dd5710eaf3adb29c/webpack.config.js#L15">Webpack Example</a>)
+
+<h2>Description</h2>
 
 YoHa is a hand tracking engine that is built with the goal of being strong
 in practical scenarios where hand tracking is employed to add true value to
@@ -83,7 +93,7 @@ is a very general and performant solution that keeps evolving and
 supports a lot of different deployment methods. In terms of performance the
 solution from mediapipe is faster. 
 There is <a target="blank" href="https://blog.tensorflow.org/2021/05/high-fidelity-pose-tracking-with-mediapipe-blazepose-and-tfjs.html">reason to believe</a>
-this is to an unknown and hard-to-assess extend due to the inference engine that they use which is closed
+this is to an unknown and hard-to-assess extend due to the inference engine that it uses which is closed
 source. 
 
 <h2>About</h2>
