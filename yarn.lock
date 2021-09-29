@@ -3639,4 +3639,4 @@ yocto-queue@^0.1.0:
 yoha@./yoha_npm.tar.gz:
   version "0.0.1"
   resolved "./yoha_npm.tar.gz#ba70ba093f19127446769ee5560e443b5bea916f"
-  integrity sha1-Yg+ZBJ1aJ2HBiEsn/Lxb5pEgS/E=
+  integrity sha1-2M5fk6wdh7Vrry8GckJQfnviIWE=
