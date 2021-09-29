@@ -8,7 +8,7 @@
 
 |  Function | Description |
 |  --- | --- |
-|  [Load(sdkUrl)](./yoha.load.md) | Fetches the JavaScript component of the hand tracking API. |
+|  [Load(url)](./yoha.load.md) | Fetches the JavaScript component of the hand tracking API. |
 
 ## Interfaces
 

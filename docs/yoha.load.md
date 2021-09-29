@@ -9,14 +9,14 @@ Fetches the JavaScript component of the hand tracking API.
 <b>Signature:</b>
 
 ```typescript
-export declare function Load(sdkUrl?: string): Promise<IHandTrackingApi>;
+export declare function Load(url: string): Promise<IHandTrackingApi>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  sdkUrl | string | (Optional) Overwrites the default URL from which the API is loaded. |
+|  url | string | Overwrites the default URL from which the API is loaded. |
 
 <b>Returns:</b>
 
