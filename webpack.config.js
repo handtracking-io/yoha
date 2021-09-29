@@ -45,7 +45,7 @@ module.exports = (env) => {
       new CopyWebpackPlugin({
         patterns: [
           {from: 'node_modules/yoha/', to: 'yoha/'},
-          {from: 'node_modules/coi-serviceworker/coi-serviceworker.min', to: './'},
+          {from: 'node_modules/coi-serviceworker/coi-serviceworker.min.js', to: './'},
         ]
       })
     ],
