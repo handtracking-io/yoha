@@ -11,8 +11,8 @@
   Quick Links:
 </h2>
 <ul>
-  <li><a href="https://handtracking-io.github.io/yoha">Demo</a> <a href="./tree/master/src/demos/draw/entry.ts">(Code)</a></li>
-  <li><a href="./tree/master/docs">Docs</a></li>
+  <li><a href="https://handtracking-io.github.io/yoha">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
+  <li><a href="https://github.com/handtracking-io/yoha/tree/master/docs">Docs</a></li>
 </ul>
 
 <h2>Installation</h2>
