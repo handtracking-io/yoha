@@ -21,9 +21,9 @@
 
 Please note:
 
-- You need to serve the files from `node_modules/@handtracking.io/yoha`. (<a href="https://github.com/handtracking-io/yoha/blob/572a9d7612c099c34d1a0830dd5710eaf3adb29c/webpack.config.js#L47">Webpack Example</a>)
-- You need to serve your page with https. (<a href="https://github.com/handtracking-io/yoha/blob/572a9d7612c099c34d1a0830dd5710eaf3adb29c/webpack.config.js#L19">Webpack Example</a>)
-- You <i>should</i> use cross-origin isolation as it improves the engine's performance in certain scenarios. (<a href="https://github.com/handtracking-io/yoha/blob/572a9d7612c099c34d1a0830dd5710eaf3adb29c/webpack.config.js#L15">Webpack Example</a>)
+- You need to serve the files from `node_modules/@handtracking.io/yoha`. (<a href="https://github.com/handtracking-io/yoha/blob/1aa0217e63a66113b2517bbca2cb60967881e505/webpack.config.js#L48">Webpack Example</a>)
+- You need to serve your page with https. (<a href="https://github.com/handtracking-io/yoha/blob/1aa0217e63a66113b2517bbca2cb60967881e505/webpack.config.js#L20">Webpack Example</a>)
+- You <i>should</i> use cross-origin isolation as it improves the engine's performance in certain scenarios. (<a href="https://github.com/handtracking-io/yoha/blob/1aa0217e63a66113b2517bbca2cb60967881e505/webpack.config.js#L15">Webpack Example</a>)
 
 <h2>Description</h2>
 
