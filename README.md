@@ -91,6 +91,10 @@ There is <a target="blank" href="https://blog.tensorflow.org/2021/05/high-fideli
 this is to an unknown and hard-to-assess extend due to the inference engine that it uses which is <a target="blank" href="https://github.com/google/mediapipe/issues/877#issuecomment-929615654">closed
 source</a>. 
 
+<h2>Running the demo locally</h2>
+
+`yarn && yarn start`
+
 <h2>About</h2>
 
 Hey, I'm Benjamin. I started out making this project because I wanted to make

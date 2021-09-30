@@ -11,24 +11,19 @@ module.exports = (env) => {
     mode: PRODUCTION ? 'production' : 'development',
     devtool: 'inline-source-map',
     devServer: {
+      open: true,
       headers: {
         // These two headers are requried for cross origin isolation.
         'Cross-Origin-Opener-Policy': 'same-origin',
         'Cross-Origin-Embedder-Policy': 'require-corp'
       },
-      contentBasePublicPath: ['/'],
       https: true,
       host: '0.0.0.0',
       port: 8090,
-      disableHostCheck: true,
       historyApiFallback: {
         disableDotRule: true,
       },
-      watchOptions: {
-        ignored: [
-          path.resolve(__dirname, 'node_modules'),
-        ]
-      },
+      watchFiles: ['src/**/*'],
     },
     output: {
       path: path.resolve(__dirname, 'www'),
