@@ -12,6 +12,7 @@ module.exports = (env) => {
     devtool: 'inline-source-map',
     devServer: {
       headers: {
+        // These two headers are requried for cross origin isolation.
         'Cross-Origin-Opener-Policy': 'same-origin',
         'Cross-Origin-Embedder-Policy': 'require-corp'
       },
@@ -44,7 +45,9 @@ module.exports = (env) => {
       }),
       new CopyWebpackPlugin({
         patterns: [
+          // This is required so that yoha can load model files etc.
           {from: 'node_modules/@handtracking.io/yoha/', to: 'yoha/'},
+          // Required for github pages...
           {from: 'node_modules/coi-serviceworker/coi-serviceworker.min.js', to: './'},
         ]
       })
