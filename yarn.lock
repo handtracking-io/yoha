@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.5.tgz#9283c9ce5b289a3c4f61c12757469e59377f81f3"
   integrity sha512-6nFkfkmSeV/rqSaS4oWHgmpnYw194f6hmWF5is6b0J1naJZoiD0NTc9AiUwPHvWsowkjuHErCZT1wa0jg+BLIA==
 
-"@handtracking.io/yoha@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@handtracking.io/yoha/-/yoha-0.0.4.tgz#6b9956613051ed69045f4d3f60d4d9d506a522e9"
-  integrity sha512-AjA+TP1O0X7akcgajFufGZgE177fFhXKe7Y/r1K7NjxTy4QQpFH+2dallY5KyYQNM+i9zCo0HkcI9EKvyYhLpQ==
+"@handtracking.io/yoha@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@handtracking.io/yoha/-/yoha-0.0.6.tgz#c9e2c1773b51df432e4a2a7945c6fc3f9df750b5"
+  integrity sha512-XjEIPd36tL5GKRZ4Rs2u6D6CiSwoVCdenkRv6ZaCBfGYB3Ni3MDlQkTQhD0zFlMGQH2ELd+F/ZaAkz8rVq5qhw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
