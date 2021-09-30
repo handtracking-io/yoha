@@ -30,9 +30,9 @@ Please note:
 YoHa is a hand tracking engine that is built with the goal of being a versatile solution
 in practical scenarios where hand tracking is employed to add value to
 an application. While ultimately the goal is to be a general purpose hand
-tracking engine supporting <i>any</i> hand pose, the engine evolves
+tracking engine supporting any hand pose, the engine evolves
 around specific hand poses that users/developers find useful. These poses 
-are detected by the engine which allows to build applications with novel interactions. 
+are detected by the engine which allows to build applications with meaningful interactions. 
 See the <a href="https://handtracking-io.github.io/yoha">demo</a> for an example.
 
 YoHa is currently only available for the web.
@@ -41,9 +41,23 @@ YoHa is currently in beta.
 
 About the name: YoHa is short for ("<b>Yo</b>ur <b>Ha</b>nd Tracking").
 
-<h2>Supported Poses</h2>
+## Technical Details
 
-Currently YoHa supports and detects the following poses:
+YoHa was build from scratch. It uses a custom neural
+network trained using a custom dataset. The backbone for the
+inference in the browser is currently <a
+target="blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a> 
+
+### Features:
+
+<ul>
+  <li>Detection of 21 2D-landmark coordinates (single hand).</li>
+  <li>Hand presence detection.</li>
+  <li>Hand orientation (left/right hand) detection.</li>
+  <li>Inbuilt pose detection.</li>
+</ul>
+
+#### Supported hand poses:
 
 <ul>
   <li>Pinch</li>
@@ -52,22 +66,7 @@ Currently YoHa supports and detects the following poses:
 
 <b>Your desired pose is not on this list? Feel free to create a GitHub issue for it.</b>
 
-<h2>Technical Details</h2>
-
-YoHa was build from scratch. It uses a custom neural
-network trained using a custom dataset. The backbone for the
-inference in the browser is currently <a
-target="blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a> 
-
-Features:
-<ul>
-  <li>Detection of 21 2D-landmark coordinates (single hand).</li>
-  <li>Hand presence detection.</li>
-  <li>Hand orientation (left/right hand) detection.</li>
-  <li>Inbuilt pose detection.</li>
-</ul>
-
-<h3>Performance</h3>
+### Performance
 
 YoHa was build with performance in mind. It is able to provide realtime user
 experience on a broad range of laptops and desktop devices. The performance
@@ -80,7 +79,7 @@ with the web inference speed. Differently put, if you were to
 run YoHa natively it would be much faster than via the web
 browser.
 
-<h2>Alternatives</h2>
+## Alternatives
 
 The most prominent hand tracking solution for the web is from <a
 target="blank" href="https://github.com/google/mediapipe">mediapipe</a>. It
@@ -91,11 +90,7 @@ There is <a target="blank" href="https://blog.tensorflow.org/2021/05/high-fideli
 this is to an unknown and hard-to-assess extend due to the inference engine that it uses which is <a target="blank" href="https://github.com/google/mediapipe/issues/877#issuecomment-929615654">closed
 source</a>. 
 
-<h2>Running the demo locally</h2>
-
-`yarn && yarn start`
-
-<h2>About</h2>
+## About
 
 Hey, I'm Benjamin. I started out making this project because I wanted to make
 the web more interactive (especially due to covid imposed home office). Existing
