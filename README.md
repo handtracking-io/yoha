@@ -27,13 +27,13 @@ Please note:
 
 <h2>Description</h2>
 
-YoHa is a hand tracking engine that is built with the goal of being strong
-in practical scenarios where hand tracking is employed to add true value to
+YoHa is a hand tracking engine that is built with the goal of being a versatile solution
+in practical scenarios where hand tracking is employed to add value to
 an application. While ultimately the goal is to be a general purpose hand
-tracking engine supporting <i>any</i> hand pose, the engine is built and will grow
-around specific hand poses that users/developers find useful. These poses are detected by the engine which allows
-to build applications with novel interactions. See the <a href="https://handtracking-io.github.io/yoha">demo</a>
-for an example.
+tracking engine supporting <i>any</i> hand pose, the engine evolves
+around specific hand poses that users/developers find useful. These poses 
+are detected by the engine which allows to build applications with novel interactions. 
+See the <a href="https://handtracking-io.github.io/yoha">demo</a> for an example.
 
 YoHa is currently only available for the web.
 
@@ -50,19 +50,14 @@ Currently YoHa supports and detects the following poses:
   <li>Fist</li>
 </ul>
 
-<b>Your help is needed to expand this list.</b>
-Please open an <a href="./issues">issue</a> or vote on an existing one to
-communicate which poses you would like to see next.
+<b>Your desired pose is not on this list? Feel free to create a GitHub issue for it.</b>
 
 <h2>Technical Details</h2>
 
 YoHa was build from scratch. It uses a custom neural
 network trained using a custom dataset. The backbone for the
 inference in the browser is currently <a
-target="blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a> as
-it currently provides the fastest open source inference for the web. However,
-this may change in the future depending on how the ML landscape for the web
-develops.
+target="blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a> 
 
 Features:
 <ul>
@@ -93,8 +88,8 @@ is a very general and performant solution that keeps evolving and
 supports a lot of different deployment methods. In terms of performance the
 solution from mediapipe is faster. 
 There is <a target="blank" href="https://blog.tensorflow.org/2021/05/high-fidelity-pose-tracking-with-mediapipe-blazepose-and-tfjs.html">reason to believe</a>
-this is to an unknown and hard-to-assess extend due to the inference engine that it uses which is closed
-source. 
+this is to an unknown and hard-to-assess extend due to the inference engine that it uses which is <a target="blank" href="https://github.com/google/mediapipe/issues/877#issuecomment-929615654">closed
+source</a>. 
 
 <h2>About</h2>
 
