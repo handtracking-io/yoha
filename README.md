@@ -43,7 +43,7 @@ About the name: YoHa is short for ("<b>Yo</b>ur <b>Ha</b>nd Tracking").
 
 ## Technical Details
 
-YoHa was build from scratch. It uses a custom neural
+YoHa was built from scratch. It uses a custom neural
 network trained using a custom dataset. The backbone for the
 inference in the browser is currently <a
 target="blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a> 
@@ -68,7 +68,7 @@ target="blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a>
 
 ### Performance
 
-YoHa was build with performance in mind. It is able to provide realtime user
+YoHa was built with performance in mind. It is able to provide realtime user
 experience on a broad range of laptops and desktop devices. The performance
 on mobile devices is not great which hopefuly will change with the further
 development of inference frameworks like 
@@ -87,8 +87,8 @@ is a very general and performant solution that keeps evolving and
 supports a lot of different deployment methods. In terms of performance the
 solution from mediapipe is faster. 
 There is <a target="blank" href="https://blog.tensorflow.org/2021/05/high-fidelity-pose-tracking-with-mediapipe-blazepose-and-tfjs.html">reason to believe</a>
-this is to an unknown and hard-to-assess extend due to the inference engine that it uses which is <a target="blank" href="https://github.com/google/mediapipe/issues/877#issuecomment-929615654">closed
-source</a>. 
+that this is due to mediapipe using a different and <a target="blank" href="https://github.com/google/mediapipe/issues/877#issuecomment-929615654">closed
+source</a> inference engine. 
 
 ## About
 
