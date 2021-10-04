@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@handtracking.io/yoha",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "homepage": "https://github.com/handtracking-io/yoha",
   "description": "Practical hand tracking engine.",
