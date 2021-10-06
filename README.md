@@ -64,7 +64,7 @@ target="_blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a>
   <li>Fist</li>
 </ul>
 
-<b>Your desired pose is not on this list? Feel free to create a GitHub issue for it.</b>
+Your desired pose is not on this list? Feel free to create a GitHub issue for it.
 
 ### Performance
 
