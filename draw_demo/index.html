@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><title>YoHa Engine Drawing Demo</title><meta name="YoHa Engine Drawing Demo" content="YoHa Engine Drawing Demo"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><script src="coi-serviceworker.min.js"></script><script defer="defer" src="draw.js"></script></head><body><style>body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #494949;
+        color: white;
+      }
+      #container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #inner-container {
+        margin-top: 2rem;
+        display: inline-block;
+        width: 85%;
+        min-height: 500px;
+        border: 1px solid white;
+        padding: 1rem;
+      }
+      #logs-container {
+        display: flex;
+      }
+      #logs {
+        padding: 1rem;
+        min-width: 30rem;
+      }
+      h3 {
+        margin-top: 0px;
+        margin-bottom: 2px;
+      }
+      .pose-image {
+        width: 100px;
+      }
+      a {
+        color: #92D1FF;
+      }</style><div id="container"><div id="inner-container"><h1>YoHa Engine Drawing Demo</h1><div id="hint-container"><div id="hint"><ul><li>Move your hand to change the position of the cursor.</li><li>Perform a pinch pose with your hand to draw:<br><img class="pose-image" src="yoha/dist/pose_images/pinchClosed_0.png"></li><li>Make a fist to clear the canvas:<br><img class="pose-image" src="yoha/dist/pose_images/fist_0.png"></li><li>Everything is done client side (i.e. in your browser). Thus your video stream is <b>NOT</b> shared with anybody.</li><li>Depending on your setup it may make sense to move closer to or further away from your camera.</li><li>The better the lighting in your room, the better it works.</li><li>MIT licensed <a href="https://github.com/handtracking-io/yoha">GitHub</a> project.</li><li>For questions, comments, requests etc. that go beyond <a href="https://github.com/handtracking-io/yoha/issues">GitHub issues</a> you are cordially invited to contact <a href="mailto:benjamin@handtracking.io">benjamin@handtracking.io</a></li></ul></div></div><hr><div id="canvas-container"><div id="canvas"></div></div><div id="logs-container"><div id="logs"><div id="mobile" style="display: none; color: red;">You appear to be using a mobile device. For best results use a laptop/desktop pc.</div><div>Downloading model: <span id="progress">0%</span></div><div id="warmup" style="display: none;">Warming up...</div><div id="camera" style="display: none;">Requesting camera access...</div><div id="error"></div></div></div></div></div></body></html>
