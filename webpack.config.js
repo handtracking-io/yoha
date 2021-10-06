@@ -26,7 +26,7 @@ module.exports = (env) => {
       watchFiles: ['src/**/*'],
     },
     output: {
-      path: path.resolve(__dirname, 'www'),
+      path: path.resolve(__dirname, 'dist'),
       clean: true,
     },
     resolve: {

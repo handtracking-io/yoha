@@ -3,7 +3,6 @@
   "name": "auxiliary_package",
   "version": "0.0.1",
   "scripts": {
-    "webpack_build": "PRODUCTION=1 webpack build",
     "start": "webpack serve",
     "update_yoha": "yarn add @handtracking.io/yoha"
   },
