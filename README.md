@@ -11,7 +11,7 @@
   Quick Links:
 </h2>
 <ul>
-  <li><a href="https://handtracking.io/draw_demo">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
+  <li><a href="https://handtracking.io/draw_demo" target="blank">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
   <li><a href="https://github.com/handtracking-io/yoha/tree/master/docs">Docs</a></li>
 </ul>
 
@@ -33,7 +33,7 @@ an application. While ultimately the goal is to be a general purpose hand
 tracking engine supporting any hand pose, the engine evolves
 around specific hand poses that users/developers find useful. These poses 
 are detected by the engine which allows to build applications with meaningful interactions. 
-See the <a href="https://handtracking.io/draw_demo">demo</a> for an example.
+See the <a href="https://handtracking.io/draw_demo" target="blank">demo</a> for an example.
 
 YoHa is currently only available for the web.
 
