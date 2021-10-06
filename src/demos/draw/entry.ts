@@ -44,7 +44,7 @@ async function CreateDrawDemo() {
       return;
     } else {
       LogError(
-          "Something went wrong when trying to access your camera :( You may try again by refreshing the page.");
+          `Something went wrong when trying to access your camera (${src.error}) You may try again by refreshing the page.`);
       return;
 
     }
@@ -100,6 +100,7 @@ async function CreateDrawDemo() {
       // videoLayer.FadeIn();
     }
   });
+ 
 }
 
 class ExponentialCoordinateAverage {

@@ -17,6 +17,9 @@ export function CreateVideoElementFromStream(stream: MediaStream) : HTMLVideoEle
   video.width = width;
   video.height = height;
   video.setAttribute('autoplay', "");
+  // Hack for ios.
+  // https://github.com/webrtc/samples/issues/929
+  video.setAttribute('playsinline', "true");
   return video;
 }
 
