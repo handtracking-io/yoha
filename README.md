@@ -15,6 +15,7 @@
 <ul>
   <li><a href="https://handtracking.io/draw_demo" target="_blank">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
   <li><a href="https://github.com/handtracking-io/yoha/tree/master/docs">Docs</a></li>
+  <li><a href="https://handtracking.io">Website</a></li>
 </ul>
 
 <h2>Installation</h2>
