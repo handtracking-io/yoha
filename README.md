@@ -7,6 +7,8 @@
 <h4 align="center">A practical hand tracking engine. </h4>
 <br>
 
+<img src="https://user-images.githubusercontent.com/7460509/136609045-827ec14b-a94a-4477-b064-b1c9488754f6.gif"></img>
+
 <h2>
   Quick Links:
 </h2>
