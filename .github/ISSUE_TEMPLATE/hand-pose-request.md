@@ -1,6 +1,6 @@
 ---
 name: Hand Pose Request
-about: Hand Pose Request.
+about: Request support for a new hand pose.
 title: "[Hand Pose Request] NAME_OF_HAND_POSE"
 labels: hand pose
 assignees: b-3-n
