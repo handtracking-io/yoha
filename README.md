@@ -63,11 +63,11 @@ target="_blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a>
 #### Supported hand poses:
 
 <ul>
-  <li>Pinch</li>
+  <li>Pinch (index finger and thumb touch)</li>
   <li>Fist</li>
 </ul>
 
-Your desired pose is not on this list? Feel free to create a GitHub issue for it.
+Your desired pose is not on this list? Feel free to create an <a href="https://github.com/handtracking-io/yoha/issues/new/choose">issue</a> for it.
 
 ### Performance
 
