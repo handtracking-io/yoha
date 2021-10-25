@@ -17,6 +17,7 @@
   <li><a href="https://github.com/handtracking-io/yoha/tree/master/docs">Docs</a></li>
   <li><a href="https://handtracking.io">Website</a></li>
   <li><a href="https://join.slack.com/t/handtrackingio/shared_invite/zt-x4y5rbls-6_1IDAlndbXvIoaWZqcLIA">Slack</a></li>
+  <li><a href="https://www.npmjs.com/package/@handtracking.io/yoha">npm</a></li>
 </ul>
 
 <h2>Installation</h2>
