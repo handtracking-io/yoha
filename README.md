@@ -84,6 +84,15 @@ with the web inference speed. Differently put, if you were to
 run YoHa natively it would be much faster than via the web
 browser.
 
+## Run Demo Locally
+
+```
+git clone https://github.com/handtracking-io/yoha && \
+cd yoha && \
+yarn && \
+yarn start
+```
+
 ## Alternatives
 
 The most prominent hand tracking solution for the web is from <a
