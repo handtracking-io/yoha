@@ -25,7 +25,6 @@ const MyEnum =  {
    ENUM_VALUE_TWO: "value_two",
 } as const;
 type PossibleEnumValues = ObjValues<typeof MyEnum>
-
 ```
 Here `PossibleEnumValues` will resolve to the type `'"value_one" | "value_two"'`<!-- -->.
 

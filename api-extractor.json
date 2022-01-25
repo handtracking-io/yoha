@@ -1,0 +1,76 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "mainEntryPointFilePath": "dist/entry.d.ts",
+  "bundledPackages": [],
+  "projectFolder": ".",
+  "compiler": {
+    "tsconfigFilePath": "./tsconfig.json"
+  },
+
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "report.api.md",
+    "reportFolder": ".",
+    "reportTempFolder": "."
+  },
+
+  "docModel": {
+    "enabled": true,
+    "apiJsonFilePath": "api_extractor_misc/docmodel.api.json"
+  },
+
+  "dtsRollup": {
+    "enabled": true,
+    "untrimmedFilePath": "types_rollup/index-untrimmed.d.ts",
+    "betaTrimmedFilePath": "types_rollup/index-beta.d.ts",
+    "publicTrimmedFilePath": "types_rollup/index.d.ts",
+    "omitTrimmingComments": true
+  },
+
+  "tsdocMetadata": {
+    "enabled": true,
+    "tsdocMetadataFilePath": "api_extractor_misc/tsdoc-metadata.json"
+  },
+
+  "messages": {
+    "compilerMessageReporting": {
+      "default": {
+        "logLevel": "error"
+      }
+    },
+    "extractorMessageReporting": {
+      "default": {
+        "logLevel": "error"
+      },
+      "ae-forgotten-export": {
+        "logLevel": "error",
+        "addToApiReportFile": false
+      },
+      "ae-incompatible-release-tags": {
+        "logLevel": "error",
+        "addToApiReportFile": false
+      },
+      "ae-internal-missing-underscore": {
+        "logLevel": "error",
+        "addToApiReportFile": false
+      },
+      "ae-internal-mixed-release-tag": {
+        "logLevel": "error",
+        "addToApiReportFile": false
+      },
+      "ae-unresolved-inheritdoc-reference": {
+        "logLevel": "error",
+        "addToApiReportFile": false
+      },
+      "ae-unresolved-inheritdoc-base": {
+        "logLevel": "error",
+        "addToApiReportFile": false
+      }
+    },
+    "tsdocMessageReporting": {
+      "default": {
+        "logLevel": "error"
+      }
+    }
+  }
+}

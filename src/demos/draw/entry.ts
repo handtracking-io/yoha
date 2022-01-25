@@ -1,8 +1,15 @@
 import {VideoLayer, PointLayer, DynamicPathLayer, LayerStack, LandmarkLayer, FpsLayer} from '../../util/layers'
-import {CreateEngine, MediaStreamErrorEnum, EventEnum} from '../../util/engine_helper'
 import {IsMobile} from '../../util/mobile_detect'
-import {ScaleResolutionToWidth} from '../../util/stream_helper'
+import {MediaStreamErrorEnum, ScaleResolutionToWidth, CreateMaxFpsMaxResStream, CreateVideoElementFromStream} from '../../util/stream_helper'
 import {ExponentialMovingAverage} from '../../util/ema'
+
+import {
+  DownloadYohaModelFiles
+} from '../../core/model/tfjs'
+
+import {
+  StartWebGlEngine,
+} from '../../core/engine/tfjs_webgl_engine'
 
 const BORDER_PADDING_FACTOR = 0.05;
 const VIDEO_WIDTH_FACTOR = 0.66;
@@ -12,39 +19,35 @@ async function CreateDrawDemo() {
     document.getElementById('mobile').style.display = '';
   }
 
-  const engine = await CreateEngine();
-  // Show download progress...
-  await engine.DownloadModel(progress => {
+  const progressCb = (received: number, total: number) => {
+    const progress = received / total;
     document.getElementById('progress').innerText = `${Math.round(progress * 100)}%`;
-  });
-
-  engine.Configure({
+  }
+  const modelFiles = await DownloadYohaModelFiles('box/model.json', 'lan/model.json', progressCb);
+  
+  const config = {
     // Webcam video is usually flipped so we want the coordinates to be flipped as well.
-    flipX: true,
+    mirrorX: true,
     // Crop away a small area at the border to prevent the user to move out of view
     // when reaching for border areas on the canvas.
     padding: BORDER_PADDING_FACTOR,
-  });
-
-  document.getElementById("warmup").style.display = '';
-  await engine.Warmup();
-  document.getElementById("camera").style.display = '';
+  };
 
   // Create a video stream. This will ask the user for camera access.
-  const src = await engine.SetUpCameraTrackSource();
+  const streamRes = await CreateMaxFpsMaxResStream();
 
-  if (src.error) {
-    if (src.error === MediaStreamErrorEnum.NOT_ALLOWED_ERROR) {
+  if (streamRes.error) {
+    if (streamRes.error === MediaStreamErrorEnum.NOT_ALLOWED_ERROR) {
       LogError(
           "You denied camera access. Refresh the page if this was a mistake and you'd like to try again.")
       return;
-    } else if (src.error === MediaStreamErrorEnum.NOT_FOUND_ERROR) {
+    } else if (streamRes.error === MediaStreamErrorEnum.NOT_FOUND_ERROR) {
       LogError(
           "No camera found. For the handtracking to work you need to connect a camera. Refresh the page to try again.")
       return;
     } else {
       LogError(
-          `Something went wrong when trying to access your camera (${src.error}) You may try again by refreshing the page.`);
+          `Something went wrong when trying to access your camera (${streamRes.error}) You may try again by refreshing the page.`);
       return;
 
     }
@@ -52,8 +55,11 @@ async function CreateDrawDemo() {
 
   document.getElementById('logs').style.display = 'none'
 
-  let width = src.video.width;
-  let height = src.video.height;
+  const src = CreateVideoElementFromStream(streamRes.stream);
+
+
+  let width = src.width;
+  let height = src.height;
 
   // Scale up/down to desired size...
   const targetWidth = window.innerWidth * VIDEO_WIDTH_FACTOR;
@@ -61,28 +67,29 @@ async function CreateDrawDemo() {
 
   // Create helper "layers" that we can use for easy visualization of the results.
   const {stack, videoLayer, pointLayer, pathLayer, landmarkLayer, fpsLayer} =
-      CreateLayerStack(src.video, width, height);
+      CreateLayerStack(src, width, height);
   document.getElementById('canvas').appendChild(stack.GetEl());
 
   // Using a subtle exponential moving average helps to get smoother results.
   // (Setting the parameter to 1 disables the smoothing if you'd like to try without it.)
   const pos = new ExponentialCoordinateAverage(0.85);
 
-  engine.Start((e) => {
-    if (e.type === EventEnum.RESULT) {
+  const engine = StartWebGlEngine(config, src, modelFiles, e => {
+    // console.log(e.isHandPresentProb);
+    if (Math.round(e.isHandPresentProb)) {
       const cursorPos = pos.Add(ComputeCursorPositionFromCoordinates(e.coordinates));
 
       pointLayer.DrawPoint(cursorPos[0], cursorPos[1]);
       pointLayer.Render();
 
-      if (e.poses.pinch) {
+      if (Math.round(e.poses.pinchProb)) {
         pathLayer.AddNode(cursorPos[0], cursorPos[1]);
         pathLayer.Render();
       } else {
         pathLayer.EndPath();
       }
 
-      if (e.poses.fist) {
+      if (Math.round(e.poses.fistProb)) {
         pathLayer.Clear();
         pathLayer.Render();
       }
@@ -92,7 +99,7 @@ async function CreateDrawDemo() {
       landmarkLayer.Draw(e.coordinates);
       landmarkLayer.Render();
       fpsLayer.RegisterCall();
-    } else if (e.type === EventEnum.LOST) {
+    } else {
       pathLayer.EndPath();
       landmarkLayer.Clear();
       landmarkLayer.Render();
@@ -100,7 +107,6 @@ async function CreateDrawDemo() {
       // videoLayer.FadeIn();
     }
   });
- 
 }
 
 class ExponentialCoordinateAverage {

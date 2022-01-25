@@ -1,12 +1,30 @@
 {
   "private": true,
-  "name": "auxiliary_package",
-  "version": "0.0.1",
+  "name": "yoha",
+  "version": "0.0.18",
+  "main": "dist/entry.js",
+  "types": "dist/entry.d.ts",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/handtracking-io/yoha",
+    "type": "git"
+  },
+  "files": [
+    "dist",
+    "models"
+  ],
   "scripts": {
     "start": "webpack serve",
-    "update_yoha": "yarn add @handtracking.io/yoha"
+    "transpile": "yarn tsc --declaration",
+    "api_extractor": "yarn api-extractor run",
+    "api_documenter": "yarn api-documenter markdown --input-folder api_extractor_misc --output-folder docs",
+    "docs": "yarn transpile && yarn api_extractor && yarn api_documenter",
+    "prepack": "yarn transpile"
   },
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.14.0",
+    "@microsoft/api-extractor": "^7.19.3",
+    "@types/offscreencanvas": "^2019.6.4",
     "@types/three": "^0.132.1",
     "coi-serviceworker": "^0.1.6",
     "copy-webpack-plugin": "^9.0.1",
@@ -21,6 +39,8 @@
     "webpack-dev-server": "^4.3.0"
   },
   "dependencies": {
-    "@handtracking.io/yoha": "^0.0.7"
+    "@tensorflow/tfjs-backend-webgl": "^3.12.0",
+    "@tensorflow/tfjs-converter": "^3.12.0",
+    "@tensorflow/tfjs-core": "^3.12.0"
   }
 }

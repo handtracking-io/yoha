@@ -4,10 +4,10 @@
 
 ## ITrackSource type
 
-The element to be used as source for the handtracking. Usually this is an HTMLVideoElement.
+The element to be used as source for the handtracking. Usually this is a `<video>` element.
 
 <b>Signature:</b>
 
 ```typescript
-export declare type ITrackSource = HTMLCanvasElement | HTMLVideoElement | HTMLImageElement;
+export declare type ITrackSource = HTMLCanvasElement | HTMLVideoElement | HTMLImageElement | OffscreenCanvas;
 ```

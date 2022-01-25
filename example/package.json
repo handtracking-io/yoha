@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "yoha_example",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "webpack serve"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^9.0.1",
+    "html-webpack-plugin": "^5.3.2",
+    "webpack": "^5.55.1",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^4.3.0"
+  },
+  "dependencies": {
+    "yoha": "../yoha-v0.0.18.tgz"
+  }
+}

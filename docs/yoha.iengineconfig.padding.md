@@ -4,11 +4,7 @@
 
 ## IEngineConfig.padding property
 
-Starting from the borders, removes a percentage of the analyzed track source.
-
-Example: A video with resolution 640x480 would yield landmark coordinates where \[0, 0\] and \[1, 1\] correspond to pixel values of \[1, 1\] and \[640, 480\] respectively.
-
-Setting padding to 0.05 would make \[0, 0\] and \[1, 1\] correspond to pixel values of \[640 \* 0.05, 480 \* 0.05\] and \[640 - 640 \* 0.05, 480 - 480 \* 0.05\] respectively.
+See [ApplyPaddingToCoordinates()](./yoha.applypaddingtocoordinates.md)<!-- -->. Default is `0`<!-- -->.
 
 <b>Signature:</b>
 

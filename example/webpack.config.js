@@ -8,7 +8,7 @@ const PRODUCTION = !!process.env.PRODUCTION;
 
 module.exports = (env) => {
   const config = {
-    mode: PRODUCTION ? 'production' : 'development',
+    mode: 'development',
     devtool: 'inline-source-map',
     devServer: {
       open: true,
@@ -19,7 +19,7 @@ module.exports = (env) => {
       },
       https: true,
       host: '0.0.0.0',
-      port: 8090,
+      port: 8091,
       historyApiFallback: {
         disableDotRule: true,
       },
@@ -30,51 +30,23 @@ module.exports = (env) => {
       clean: true,
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.js'],
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'src/demos/draw/index.html',
         filename: 'index.html',
-        chunks: ['draw'],
+        chunks: ['example'],
       }),
       new CopyWebpackPlugin({
         patterns: [
-          {from: 'models/lan', to: 'lan/'},
-          {from: 'models/box', to: 'box/'},
-          // Required for github pages...
-          {from: 'node_modules/coi-serviceworker/coi-serviceworker.min.js', to: './'},
+          {from: 'node_modules/yoha/models/', to: './'},
         ]
       })
     ],
-    optimization: {
-      minimizer: [new TerserPlugin({
-        extractComments: false,
-        exclude: /\.min\./,
-      })],
-    },
-    module: {
-      rules: [
-        {
-          test: /\.wasm$/i,
-          type: 'javascript/auto',
-          use: [
-            {
-              loader: 'file-loader',
-            },
-          ],
-        },
-        {
-          test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
-    },
     entry: {
-      draw: {
-        import: './src/demos/draw/entry.ts',
-        filename: 'draw.js',
+      example: {
+        import: './src/entry.js',
+        filename: 'example.js',
       },
     }
   };

@@ -1,2 +1,6 @@
 node_modules/
-draw_demo/
+types/
+types_rollup/
+api_extractor_misc/
+models/
+dist/

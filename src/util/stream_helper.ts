@@ -1,9 +1,58 @@
+import {ObjValues} from './enum_helper'
+
+/**
+ * @public
+ */
+export interface IMediaStreamResult {
+  stream: MediaStream | null
+  error?:  ObjValues<typeof MediaStreamErrorEnum>
+}
+
+/**
+ * @public
+ * Possible error types that can occur when calling navigator.mediaDevices.getUserMedia.
+ *
+ * @remarks 
+ *
+ * See {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#exceptions | here}
+ * for more infos.
+ */
+export const MediaStreamErrorEnum = {
+  ABORT_ERROR: "AbortError",
+  NOT_ALLOWED_ERROR: "NotAllowedError",
+  NOT_FOUND_ERROR: "NotFoundError",
+  NOT_READABLE_ERROR: "NotReadableError",
+  OVERCONSTRAINTED_ERROR: "OverconstrainedError",
+  SECURITY_ERROR: "SecurityError",
+  TYPE_ERROR: "TypeError",
+} as const;
+
+const MEDIA_STREAM_ERROR_NAMES = new Set(Object.values(MediaStreamErrorEnum));
+
 /**
  * @public
  */
 export interface IResolution {
   width: number
   height: number
+}
+
+
+async function GetStreamWithConstraints(constraints: MediaStreamConstraints) : Promise<IMediaStreamResult> {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    return {
+      stream
+    }
+  } catch (e) {
+    if (MEDIA_STREAM_ERROR_NAMES.has(e.name)) {
+      return {
+        stream: null,
+        error: e.name
+      }
+    }
+    throw e;
+  }
 }
 
 
@@ -124,4 +173,50 @@ export function ScaleResolutionMinimizingEuclidianDistance(
  */
 export function GetStreamFrameRate(stream: MediaStream) : number {
   return stream.getVideoTracks()[0].getSettings().frameRate;
+}
+
+/**
+ * @public
+ * Creates a MediaStream with maximum fps and given the max fps the highest available resolution.
+ */
+export async function CreateMaxFpsMaxResStream() : Promise<IMediaStreamResult> {
+  const w = 4096;
+  const h = 2048;
+  // const w = 640;
+  // const h = 480;
+  const fps = [60, 30, 24];
+  for (let i = 0; i < fps.length; ++i) {
+    const res = await GetStreamWithConstraints({
+        audio: false,
+        video: {
+          facingMode: 'user',
+          width: {
+            ideal: w,
+          },
+          height: {
+            ideal: h,
+          },
+          frameRate: {
+            min: fps[i],
+          }
+        },
+      });
+    if (res.error === MediaStreamErrorEnum.OVERCONSTRAINTED_ERROR) {
+      continue;
+    } else {
+      return res;
+    }
+  }
+  return await GetStreamWithConstraints({
+    audio: false,
+    video: {
+      facingMode: 'user',
+      width: {
+        ideal: w,
+      },
+      height: {
+        ideal: h,
+      },
+    },
+  });
 }
