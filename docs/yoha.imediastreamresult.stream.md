@@ -4,8 +4,10 @@
 
 ## IMediaStreamResult.stream property
 
+The created mediaStream. Set if no error occurred.
+
 <b>Signature:</b>
 
 ```typescript
-stream: MediaStream | null;
+stream?: MediaStream;
 ```

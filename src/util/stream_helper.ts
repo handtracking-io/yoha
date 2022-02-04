@@ -2,9 +2,16 @@ import {ObjValues} from './enum_helper';
 
 /**
  * @public
+ * Result of trying to obtain a MediaStream.
  */
 export interface IMediaStreamResult {
-  stream: MediaStream | null
+  /**
+   * The created mediaStream. Set if no error occurred.
+   */
+  stream?: MediaStream
+  /**
+   * Type of error that occurred. Set if an error occurred.
+   */
   error?:  ObjValues<typeof MediaStreamErrorEnum>
 }
 
@@ -48,7 +55,6 @@ async function GetStreamWithConstraints(constraints: MediaStreamConstraints)
   } catch (e) {
     if (MEDIA_STREAM_ERROR_NAMES.has(e.name)) {
       return {
-        stream: null,
         error: e.name
       };
     }
@@ -59,6 +65,10 @@ async function GetStreamWithConstraints(constraints: MediaStreamConstraints)
 
 /**
  * @public
+ *
+ * Creates a <video> element for the given stream
+ *
+ * @param stream - The stream to associate with the video element.
  */
 export function CreateVideoElementFromStream(stream: MediaStream) : HTMLVideoElement {
   const video = document.createElement('video');

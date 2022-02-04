@@ -4,6 +4,7 @@
 
 ## CreateVideoElementFromStream() function
 
+Creates a <video> element for the given stream
 
 <b>Signature:</b>
 
@@ -15,7 +16,7 @@ export declare function CreateVideoElementFromStream(stream: MediaStream): HTMLV
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  stream | MediaStream |  |
+|  stream | MediaStream | The stream to associate with the video element. |
 
 <b>Returns:</b>
 

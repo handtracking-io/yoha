@@ -12,7 +12,7 @@ Yoha hand tracking library for precision interactions.
 |  --- | --- |
 |  [ApplyPaddingToCoordinates(padding, coords)](./yoha.applypaddingtocoordinates.md) | Starting from the borders, removes a percentage of the analyzed track source. |
 |  [CreateMaxFpsMaxResStream()](./yoha.createmaxfpsmaxresstream.md) | Creates a MediaStream with maximum fps and given the max fps the highest available resolution. |
-|  [CreateVideoElementFromStream(stream)](./yoha.createvideoelementfromstream.md) |  |
+|  [CreateVideoElementFromStream(stream)](./yoha.createvideoelementfromstream.md) | Creates a <video> element for the given stream |
 |  [DownloadYohaModelFiles(boxUrl, lanUrl, progressCb)](./yoha.downloadyohamodelfiles.md) | Downloads a list of TFJS models. |
 |  [MirrorCoordinatesHorizontally(coords)](./yoha.mirrorcoordinateshorizontally.md) | Mirrors result coordinates along the y axis i.e. <code>[x, y]</code> becomes <code>[1 - x, y]</code>. |
 |  [StartWebGlEngine(config, trackSource, yohaModel, resCb)](./yoha.startwebglengine.md) | Starts an analysis loop on a track source (e.g. a <code>&lt;video&gt;</code> element) using the TFJS WebGl backend. |
@@ -22,7 +22,7 @@ Yoha hand tracking library for precision interactions.
 |  Interface | Description |
 |  --- | --- |
 |  [IEngineConfig](./yoha.iengineconfig.md) | Engine configuration. |
-|  [IMediaStreamResult](./yoha.imediastreamresult.md) |  |
+|  [IMediaStreamResult](./yoha.imediastreamresult.md) | Result of trying to obtain a MediaStream. |
 |  [IPoseProbabilities](./yoha.iposeprobabilities.md) | The detected hand poses. |
 |  [IStopEngineCb](./yoha.istopenginecb.md) | A callback that when invoked stops the engine. |
 |  [ITfjsModelFiles](./yoha.itfjsmodelfiles.md) | Collection of files belonging to a TFJS model. |

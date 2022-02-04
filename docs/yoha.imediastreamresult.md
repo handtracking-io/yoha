@@ -4,6 +4,7 @@
 
 ## IMediaStreamResult interface
 
+Result of trying to obtain a MediaStream.
 
 <b>Signature:</b>
 
@@ -15,6 +16,6 @@ export interface IMediaStreamResult
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [error?](./yoha.imediastreamresult.error.md) | [ObjValues](./yoha.objvalues.md)<!-- -->&lt;typeof [MediaStreamErrorEnum](./yoha.mediastreamerrorenum.md)<!-- -->&gt; | <i>(Optional)</i> |
-|  [stream](./yoha.imediastreamresult.stream.md) | MediaStream \| null |  |
+|  [error?](./yoha.imediastreamresult.error.md) | [ObjValues](./yoha.objvalues.md)<!-- -->&lt;typeof [MediaStreamErrorEnum](./yoha.mediastreamerrorenum.md)<!-- -->&gt; | <i>(Optional)</i> Type of error that occurred. Set if an error occurred. |
+|  [stream?](./yoha.imediastreamresult.stream.md) | MediaStream | <i>(Optional)</i> The created mediaStream. Set if no error occurred. |
 

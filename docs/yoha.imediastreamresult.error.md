@@ -4,6 +4,8 @@
 
 ## IMediaStreamResult.error property
 
+Type of error that occurred. Set if an error occurred.
+
 <b>Signature:</b>
 
 ```typescript

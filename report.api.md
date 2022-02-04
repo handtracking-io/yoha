@@ -12,7 +12,7 @@ export function ApplyPaddingToCoordinates(padding: number, coords: number[][]): 
 // @public
 export function CreateMaxFpsMaxResStream(): Promise<IMediaStreamResult>;
 
-// @public (undocumented)
+// @public
 export function CreateVideoElementFromStream(stream: MediaStream): HTMLVideoElement;
 
 // @public
@@ -27,12 +27,10 @@ export interface IEngineConfig {
     padding?: number;
 }
 
-// @public (undocumented)
+// @public
 export interface IMediaStreamResult {
-    // (undocumented)
     error?: ObjValues<typeof MediaStreamErrorEnum>;
-    // (undocumented)
-    stream: MediaStream | null;
+    stream?: MediaStream;
 }
 
 // @public
