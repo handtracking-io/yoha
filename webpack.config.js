@@ -42,8 +42,6 @@ module.exports = (env) => {
         patterns: [
           {from: 'models/lan', to: 'lan/'},
           {from: 'models/box', to: 'box/'},
-          // Required for github pages...
-          {from: 'node_modules/coi-serviceworker/coi-serviceworker.min.js', to: './'},
         ]
       })
     ],
