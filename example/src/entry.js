@@ -1,6 +1,6 @@
 /**
  * This is a very minimal example showcasing various features of the Yoha engine.
- * The Example creates a colored box that can be moved using hand movements. Performing
+ * The example creates a colored box that can be moved using hand movements. Performing
  * a pinch or fist gesture changes the color of the cursor.
  */
 import * as yoha from 'yoha'
