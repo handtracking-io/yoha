@@ -24,5 +24,4 @@ jobs:
 
     - name: Check Docs
       run: |
-        yarn
-        yarn docs
+        cd ci && ./ensure_docs_sync.sh
