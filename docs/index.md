@@ -8,5 +8,5 @@
 
 |  Package | Description |
 |  --- | --- |
-|  [yoha](./yoha.md) | Yoha hand tracking library for precision interactions. |
+|  [@handtracking.io/yoha](./yoha.md) | Yoha hand tracking library for precision interactions. |
 
