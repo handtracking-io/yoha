@@ -40,11 +40,14 @@ around specific hand poses that users/developers find useful. These poses
 are detected by the engine which allows to build applications with meaningful interactions. 
 See the <a href="https://handtracking.io/draw_demo" target="_blank">demo</a> for an example.
 
-Yoha is currently only available for the web.
-
 Yoha is currently in beta.
 
 About the name: Yoha is short for ("<b>Yo</b>ur <b>Ha</b>nd Tracking").
+
+## Language Support
+
+Yoha is currently available for the web via JavaScript. More languages will be added
+in the future. If you want to port Yoha to another language and need help feel free reach out.
 
 ## Technical Details
 
@@ -62,7 +65,7 @@ target="_blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a>
   <li>Inbuilt pose detection.</li>
 </ul>
 
-#### Supported hand poses:
+#### Supported Hand Poses:
 
 <ul>
   <li>Pinch (index finger and thumb touch)</li>
@@ -70,7 +73,6 @@ target="_blank" href="https://github.com/tensorflow/tfjs">TensorFlow.js</a>
 </ul>
 
 Your desired pose is not on this list? Feel free to create an <a href="https://github.com/handtracking-io/yoha/issues/new/choose">issue</a> for it.
-
 ### Performance
 
 Yoha was built with performance in mind. It is able to provide realtime user
