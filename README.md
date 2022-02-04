@@ -84,16 +84,23 @@ with the web inference speed. Differently put, if you were to
 run Yoha natively it would be much faster than via the web
 browser.
 
-## Minimal Standalone Example Showing Package Usage
+## Minimal Example
+
+- [Source](https://github.com/handtracking-io/yoha/tree/main/example/)
+- Running locally:
 
 ```
-cd example && \
+git clone https://github.com/handtracking-io/yoha && \
+cd yoha/example && \
 yarn && \
 yarn start
 ```
 
 ## Drawing Demo
 
+- [Live Version](https://handtracking.io/draw_demo)
+- [Source](https://github.com/handtracking-io/yoha/tree/main/src/demos/draw)
+- Running locally:
 ```
 git clone https://github.com/handtracking-io/yoha && \
 cd yoha && \
@@ -102,6 +109,7 @@ yarn && \
 yarn start
 ```
 
-<br>
-<a href="mailto:benjamin@handtracking.io">benjamin@handtracking.io</a>
+## Contact:
+- <a href="mailto:benjamin@handtracking.io">benjamin@handtracking.io</a>
+- <a href="https://join.slack.com/t/handtrackingio/shared_invite/zt-x4y5rbls-6_1IDAlndbXvIoaWZqcLIA">Slack</a>
 
