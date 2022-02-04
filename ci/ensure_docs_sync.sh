@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-cd ..
+cd $(dirname "$BASH_SOURCE")/..
 yarn
 yarn docs
-cd -
-./ensure_clean_tree.sh
+./ci/ensure_clean_tree.sh
