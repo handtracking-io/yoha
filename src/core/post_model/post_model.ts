@@ -1,5 +1,10 @@
-import {IPreprocInfo} from '../pre_model/preproc_comp'
-import {AspectRatioAwareRotation, CoordsOutsideBox, FlipCoordsHorizontally, CoordsInsideBox} from '../../util/math_helper'
+import {IPreprocInfo} from '../pre_model/preproc_comp';
+import {
+  AspectRatioAwareRotation, 
+  CoordsOutsideBox, 
+  FlipCoordsHorizontally, 
+  CoordsInsideBox
+} from '../../util/math_helper';
 
 /**
  * @public
@@ -101,10 +106,16 @@ const USER_FRIENDLY_COORD_ORDER = [
  * @param coords - List of landmark coordinates.
  */
 export function ConvertLandmarkCoordinatesToGlobalCoordinates(
-  preprocInfo: IPreprocInfo, aspectRatio: number[], coords: number[][]) : number[][] {
+  preprocInfo: IPreprocInfo, 
+  aspectRatio: number[], 
+  coords: number[][]
+) : number[][] {
   const p = preprocInfo;
   const araRot = new AspectRatioAwareRotation(
-      p.rotationCenter, p.rotationInRadians, aspectRatio);
+    p.rotationCenter, 
+    p.rotationInRadians, 
+    aspectRatio
+  );
   coords = CoordsOutsideBox([p.topLeft, p.bottomRight], coords);
   coords = araRot.ApplyReverse(coords);
   return coords;
@@ -119,7 +130,8 @@ export function ConvertLandmarkCoordinatesToGlobalCoordinates(
  */
 export function AssembleTrackResultFromCoordinatesAndClasses(
   coords: number[][], 
-  classes: number[]) : ITrackResult {
+  classes: number[]
+) : ITrackResult {
   return {
     coordinates: coords,
     poses: {
@@ -140,7 +152,8 @@ export function AssembleTrackResultFromCoordinatesAndClasses(
  * @param coords - The coordinates to mirror.
  */
 export function MirrorCoordinatesHorizontally(
-  coords: number[][]) : number[][]{
+  coords: number[][]
+) : number[][]{
   return FlipCoordsHorizontally(coords);
 }
 
@@ -161,13 +174,12 @@ export function MirrorCoordinatesHorizontally(
  */
 export function ApplyPaddingToCoordinates(
   padding: number,
-  coords: number[][]) : number[][]{
-  let topLeft : number [];
-  let bottomRight : number [];
+  coords: number[][]
+) : number[][]{
   const d = padding;
-  topLeft = [d, d];
-  bottomRight = [1 - d, 1 - d];
-  coords = CoordsInsideBox([topLeft, bottomRight], coords)
+  const topLeft = [d, d];
+  const bottomRight = [1 - d, 1 - d];
+  coords = CoordsInsideBox([topLeft, bottomRight], coords);
   return coords;
 }
 

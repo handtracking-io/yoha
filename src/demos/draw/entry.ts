@@ -8,15 +8,22 @@ import {
   CreateMaxFpsMaxResStream,
   MediaStreamErrorEnum, 
   CreateVideoElementFromStream,
-} from '../../entry'
+} from '../../entry';
 
 /**
  * Utilities specific to the drawing demo. Not included in the Yoha npm package right now.
  */
-import {VideoLayer, PointLayer, DynamicPathLayer, LayerStack, LandmarkLayer, FpsLayer} from '../../util/layers'
-import {IsMobile} from '../../util/mobile_detect'
-import {ScaleResolutionToWidth} from '../../util/stream_helper'
-import {ExponentialMovingAverage} from '../../util/ema'
+import {
+  VideoLayer, 
+  PointLayer, 
+  DynamicPathLayer, 
+  LayerStack, 
+  LandmarkLayer, 
+  FpsLayer
+} from '../../util/layers';
+import {IsMobile} from '../../util/mobile_detect';
+import {ScaleResolutionToWidth} from '../../util/stream_helper';
+import {ExponentialMovingAverage} from '../../util/ema';
 
 const BORDER_PADDING_FACTOR = 0.05;
 const VIDEO_WIDTH_FACTOR = 0.66;
@@ -29,7 +36,7 @@ async function CreateDrawDemo() {
   const progressCb = (received: number, total: number) => {
     const progress = received / total;
     document.getElementById('progress').innerText = `${Math.round(progress * 100)}%`;
-  }
+  };
   const modelFiles = await DownloadYohaModelFiles('box/model.json', 'lan/model.json', progressCb);
   
   const config = {
@@ -45,22 +52,22 @@ async function CreateDrawDemo() {
 
   if (streamRes.error) {
     if (streamRes.error === MediaStreamErrorEnum.NOT_ALLOWED_ERROR) {
-      LogError(
-          "You denied camera access. Refresh the page if this was a mistake and you'd like to try again.")
+      LogError('You denied camera access. Refresh the page if this was a mistake ' +
+               'and you\'d like to try again.');
       return;
     } else if (streamRes.error === MediaStreamErrorEnum.NOT_FOUND_ERROR) {
-      LogError(
-          "No camera found. For the handtracking to work you need to connect a camera. Refresh the page to try again.")
+      LogError('No camera found. For the handtracking to work you need to connect a camera. ' +
+               'Refresh the page to try again.');
       return;
     } else {
-      LogError(
-          `Something went wrong when trying to access your camera (${streamRes.error}) You may try again by refreshing the page.`);
+      LogError(`Something went wrong when trying to access your camera (${streamRes.error}) ` +
+               'You may try again by refreshing the page.');
       return;
 
     }
   }
 
-  document.getElementById('logs').style.display = 'none'
+  document.getElementById('logs').style.display = 'none';
 
   const src = CreateVideoElementFromStream(streamRes.stream);
 
@@ -72,8 +79,8 @@ async function CreateDrawDemo() {
   const targetWidth = window.innerWidth * VIDEO_WIDTH_FACTOR;
   ({width, height} = ScaleResolutionToWidth({width, height}, targetWidth));
 
-  // Create helper "layers" that we can use for easy visualization of the results.
-  const {stack, videoLayer, pointLayer, pathLayer, landmarkLayer, fpsLayer} =
+  // Create helper 'layers' that we can use for easy visualization of the results.
+  const {stack, pointLayer, pathLayer, landmarkLayer, fpsLayer} =
       CreateLayerStack(src, width, height);
   document.getElementById('canvas').appendChild(stack.GetEl());
 
@@ -81,7 +88,7 @@ async function CreateDrawDemo() {
   // (Setting the parameter to 1 disables the smoothing if you'd like to try without it.)
   const pos = new ExponentialCoordinateAverage(0.85);
 
-  const engine = StartWebGlEngine(config, src, modelFiles, e => {
+  StartWebGlEngine(config, src, modelFiles, e => {
     // console.log(e.isHandPresentProb);
     if (Math.round(e.isHandPresentProb)) {
       const cursorPos = pos.Add(ComputeCursorPositionFromCoordinates(e.coordinates));
@@ -117,8 +124,8 @@ async function CreateDrawDemo() {
 }
 
 class ExponentialCoordinateAverage {
-  private xAvg_: ExponentialMovingAverage
-  private yAvg_: ExponentialMovingAverage
+  private xAvg_: ExponentialMovingAverage;
+  private yAvg_: ExponentialMovingAverage;
 
   constructor(alpha: number) {
     this.xAvg_ = new ExponentialMovingAverage(alpha);
@@ -135,7 +142,7 @@ function ComputeCursorPositionFromCoordinates(coords: number[][]) : number[] {
 }
 
 function LogError(error: string) {
-  document.getElementById("error").innerText = error;
+  document.getElementById('error').innerText = error;
 }
 
 // This function creates utilities for visualizing the results. There is no magic
@@ -153,7 +160,7 @@ function CreateLayerStack(video: HTMLVideoElement, width: number, height: number
     height,
     virtuallyFlipHorizontal: true,
     crop: BORDER_PADDING_FACTOR,
-  }, video)
+  }, video);
   stack.AddLayer(videoLayer);
 
   const pointLayer = new PointLayer({
@@ -191,7 +198,5 @@ function CreateLayerStack(video: HTMLVideoElement, width: number, height: number
   return {stack, videoLayer, pointLayer, pathLayer, landmarkLayer, fpsLayer};
 }
 
-// Don't execute inside web workers. This check is for internal infrastructure only, you can ignore this.
-if (typeof document !== 'undefined') { 
-  document.addEventListener("DOMContentLoaded", CreateDrawDemo);
-}
+
+CreateDrawDemo();

@@ -1,6 +1,6 @@
 export class ExponentialMovingAverage {
-  private alpha_: number
-  private curValue_: number
+  private alpha_: number;
+  private curValue_: number;
 
   constructor(alpha: number) {
     this.alpha_ = alpha;

@@ -1,4 +1,4 @@
-import {ITrackSource} from '../track_source'
+import {ITrackSource} from '../track_source';
 
 export interface IModelResult {
   /**
@@ -12,8 +12,8 @@ export interface IModelResult {
 }
 
 export const enum ModelInputType {
-  TRACK_SOURCE = "TRACK_SOURCE",
-  TYPED_ARRAY = "TYPED_ARRAY",
+  TRACK_SOURCE = 'TRACK_SOURCE',
+  TYPED_ARRAY = 'TYPED_ARRAY',
 }
 
 export interface ITrackSourceInput {
@@ -38,7 +38,8 @@ export interface IModelCb {
  * Callback that periodically informs about download progress.
  * @remarks
  * <b>received</b>: Number in range [0,total]<br>
- * <b>total</b>: Number in range [0,INFINITY) that stays the same across invocations of the function.
+ * <b>total</b>: Number in range [0,INFINITY) that stays the same across invocations of the 
+ * function.
  */
 export type IModelDownloadProgressCb = (received: number, total: number) => void
 
@@ -47,7 +48,8 @@ export interface IModelDownloadProgressCbCreationFn {
 }
 
 export function CreateSimultaneousDownloadProgressCb(
-  combinedProgressCb: IModelDownloadProgressCb) : IModelDownloadProgressCbCreationFn {
+  combinedProgressCb: IModelDownloadProgressCb
+) : IModelDownloadProgressCbCreationFn {
   let totalReceived = 0;
   let totalSize = 0;
   return () => {

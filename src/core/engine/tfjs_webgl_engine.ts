@@ -3,9 +3,9 @@ import {
   ITrackResultCb,
   IStopEngineCb,
   StartEngine,
-} from './base'
+} from './base';
 
-import {ITrackSource} from '../track_source'
+import {ITrackSource} from '../track_source';
 
 import {
   TfjsBackendType,
@@ -13,15 +13,16 @@ import {
   CreateTfjsModelFromModelFiles,
   CreateModelCbFromTfjsModel,
   GetInputDimensionsFromTfjsModel,
-} from '../model/tfjs'
+} from '../model/tfjs';
 
 import {
   CreateHtmlCanvasBasedPreprocCb
-} from '../pre_model/canvas_preproc'
+} from '../pre_model/canvas_preproc';
 
 /**
  * @public
- * Starts an analysis loop on a track source (e.g. a `<video>` element) using the TFJS WebGl backend.
+ * Starts an analysis loop on a track source (e.g. a `<video>` element) using the TFJS WebGl 
+ * backend.
  *
  * @param config - Engine configuration.
  * @param trackSource - The element to be analyzed.
@@ -32,11 +33,11 @@ import {
  * @returns Promise that resolves with a callback that can be used to stop the analysis.
  */
 export async function StartWebGlEngine(
-   config: IEngineConfig, 
-   trackSource: ITrackSource, 
-   yohaModel: IYohaModelFiles,
-   resCb: ITrackResultCb,
-  ) : Promise<IStopEngineCb> {
+  config: IEngineConfig, 
+  trackSource: ITrackSource, 
+  yohaModel: IYohaModelFiles,
+  resCb: ITrackResultCb,
+) : Promise<IStopEngineCb> {
   const [boxModel, lanModel] = await Promise.all([
     CreateTfjsModelFromModelFiles(yohaModel.box, TfjsBackendType.WEBGL),  
     CreateTfjsModelFromModelFiles(yohaModel.lan, TfjsBackendType.WEBGL),
@@ -46,11 +47,15 @@ export async function StartWebGlEngine(
   const lanDims = GetInputDimensionsFromTfjsModel(lanModel);
 
   if (boxDims[0] !== lanDims[0] || boxDims[1] !== lanDims[1]) {
-    throw 'Engine does not support different dimensions for box and landmark model right now.'
+    throw 'Engine does not support different dimensions for box and landmark model right now.';
   }
 
   const preprocCb = CreateHtmlCanvasBasedPreprocCb(
-    trackSource.width, trackSource.height, boxDims[0], boxDims[1]);
+    trackSource.width, 
+    trackSource.height, 
+    boxDims[0], 
+    boxDims[1]
+  );
   const boxCb = CreateModelCbFromTfjsModel(boxModel, true);
   const lanCb = CreateModelCbFromTfjsModel(lanModel, true);
 

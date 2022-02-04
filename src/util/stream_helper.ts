@@ -1,4 +1,4 @@
-import {ObjValues} from './enum_helper'
+import {ObjValues} from './enum_helper';
 
 /**
  * @public
@@ -18,13 +18,13 @@ export interface IMediaStreamResult {
  * for more infos.
  */
 export const MediaStreamErrorEnum = {
-  ABORT_ERROR: "AbortError",
-  NOT_ALLOWED_ERROR: "NotAllowedError",
-  NOT_FOUND_ERROR: "NotFoundError",
-  NOT_READABLE_ERROR: "NotReadableError",
-  OVERCONSTRAINTED_ERROR: "OverconstrainedError",
-  SECURITY_ERROR: "SecurityError",
-  TYPE_ERROR: "TypeError",
+  ABORT_ERROR: 'AbortError',
+  NOT_ALLOWED_ERROR: 'NotAllowedError',
+  NOT_FOUND_ERROR: 'NotFoundError',
+  NOT_READABLE_ERROR: 'NotReadableError',
+  OVERCONSTRAINTED_ERROR: 'OverconstrainedError',
+  SECURITY_ERROR: 'SecurityError',
+  TYPE_ERROR: 'TypeError',
 } as const;
 
 const MEDIA_STREAM_ERROR_NAMES = new Set(Object.values(MediaStreamErrorEnum));
@@ -38,18 +38,19 @@ export interface IResolution {
 }
 
 
-async function GetStreamWithConstraints(constraints: MediaStreamConstraints) : Promise<IMediaStreamResult> {
+async function GetStreamWithConstraints(constraints: MediaStreamConstraints) 
+  : Promise<IMediaStreamResult> {
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     return {
       stream
-    }
+    };
   } catch (e) {
     if (MEDIA_STREAM_ERROR_NAMES.has(e.name)) {
       return {
         stream: null,
         error: e.name
-      }
+      };
     }
     throw e;
   }
@@ -65,10 +66,10 @@ export function CreateVideoElementFromStream(stream: MediaStream) : HTMLVideoEle
   video.srcObject = stream;
   video.width = width;
   video.height = height;
-  video.setAttribute('autoplay', "");
+  video.setAttribute('autoplay', '');
   // Hack for ios.
   // https://github.com/webrtc/samples/issues/929
-  video.setAttribute('playsinline', "true");
+  video.setAttribute('playsinline', 'true');
   return video;
 }
 
@@ -79,7 +80,7 @@ export function GetStreamDimensions(stream: MediaStream) : IResolution {
   return {
     width: stream.getVideoTracks()[0].getSettings().width,
     height: stream.getVideoTracks()[0].getSettings().height,
-  }
+  };
 }
 
 /**
@@ -87,7 +88,8 @@ export function GetStreamDimensions(stream: MediaStream) : IResolution {
  */
 export function ScaleResolutionToWidth(
   resolution: IResolution,
-  width: number) : IResolution {
+  width: number
+) : IResolution {
   const cw = resolution.width;
   const ch = resolution.height;
   const tw = width;
@@ -103,7 +105,8 @@ export function ScaleResolutionToWidth(
  */
 export function ScaleResolutionToHeight(
   resolution: IResolution,
-  height: number) : IResolution {
+  height: number
+) : IResolution {
   const cw = resolution.width;
   const ch = resolution.height;
   const th = height;
@@ -111,7 +114,7 @@ export function ScaleResolutionToHeight(
   return {
     width: cw / (ch / th),
     height: th,
-  }
+  };
 }
 
 /**
@@ -119,7 +122,8 @@ export function ScaleResolutionToHeight(
  */
 export function ScaleResolutionDown(
   resolution: IResolution,
-  upperResolutionLimit: IResolution) : IResolution {
+  upperResolutionLimit: IResolution
+) : IResolution {
   const res = resolution;
   const uRes = upperResolutionLimit;
   if (res.width <= uRes.width && res.height <= uRes.height) {
@@ -137,7 +141,8 @@ export function ScaleResolutionDown(
  */
 export function ScaleResolutionUp(
   resolution: IResolution,
-  lowerResolutionLimit: IResolution) : IResolution {
+  lowerResolutionLimit: IResolution
+) : IResolution {
   const res = resolution;
   const lRes = lowerResolutionLimit;
   if (res.width >= lRes.width && res.height >= lRes.height) {
@@ -156,7 +161,9 @@ export function ScaleResolutionUp(
  * distance to the target resolution.
  */
 export function ScaleResolutionMinimizingEuclidianDistance(
-    resolution: IResolution, targetResolution: IResolution): IResolution {
+  resolution: IResolution, 
+  targetResolution: IResolution
+): IResolution {
   const alpha = resolution.width;
   const beta = resolution.height;
   const gamma = targetResolution.width;
@@ -187,20 +194,20 @@ export async function CreateMaxFpsMaxResStream() : Promise<IMediaStreamResult> {
   const fps = [60, 30, 24];
   for (let i = 0; i < fps.length; ++i) {
     const res = await GetStreamWithConstraints({
-        audio: false,
-        video: {
-          facingMode: 'user',
-          width: {
-            ideal: w,
-          },
-          height: {
-            ideal: h,
-          },
-          frameRate: {
-            min: fps[i],
-          }
+      audio: false,
+      video: {
+        facingMode: 'user',
+        width: {
+          ideal: w,
         },
-      });
+        height: {
+          ideal: h,
+        },
+        frameRate: {
+          min: fps[i],
+        }
+      },
+    });
     if (res.error === MediaStreamErrorEnum.OVERCONSTRAINTED_ERROR) {
       continue;
     } else {
