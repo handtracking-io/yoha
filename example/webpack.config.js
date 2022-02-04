@@ -1,10 +1,6 @@
-const path = require('path');
-
+/* eslint-disable */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-
-const PRODUCTION = !!process.env.PRODUCTION;
 
 module.exports = (env) => {
   const config = {

@@ -63,7 +63,6 @@ export interface IEngineConfig {
   __userFriendlyCoordinateOrder?: boolean
 
   /**
-   * @public
    * For internal use.
    */
   __boxSlack?: number
@@ -71,7 +70,7 @@ export interface IEngineConfig {
 
 /**
  * @public
- * 
+ *
  * A callback that when invoked stops the engine.
  */
 export interface IStopEngineCb {

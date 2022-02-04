@@ -1,6 +1,6 @@
 /**
  * Same imports are available via the Yoha npm package 
- * https://www.npmjs.com/package/@handtracking.io/yoha.
+ * https://www.npmjs.com/package/%40handtracking.io/yoha.
  */
 import {
   DownloadYohaModelFiles,
