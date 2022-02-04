@@ -5,7 +5,15 @@
   "main": "dist/entry.js",
   "types": "dist/entry.d.ts",
   "license": "MIT",
-  "keywords": ["handtracking", "hand detection", "hand pose", "hand", "tracking", "ai", "artificial intelligence"],
+  "keywords": [
+    "handtracking",
+    "hand detection",
+    "hand pose",
+    "hand",
+    "tracking",
+    "ai",
+    "artificial intelligence"
+  ],
   "repository": {
     "url": "https://github.com/handtracking-io/yoha",
     "type": "git"
@@ -19,16 +27,20 @@
     "transpile": "yarn tsc --declaration",
     "api_extractor": "yarn api-extractor run",
     "api_documenter": "yarn api-documenter markdown --input-folder api_extractor_misc --output-folder docs",
-    "docs": "yarn transpile && yarn api_extractor && yarn api_documenter",
-    "prepack": "yarn transpile"
+    "docs": "yarn lint && yarn transpile && yarn api_extractor && yarn api_documenter",
+    "lint": "yarn eslint src",
+    "prepack": "yarn lint && yarn transpile"
   },
   "devDependencies": {
     "@microsoft/api-documenter": "^7.14.0",
     "@microsoft/api-extractor": "^7.19.3",
     "@types/offscreencanvas": "^2019.6.4",
     "@types/three": "^0.132.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.2",
+    "@typescript-eslint/parser": "^5.10.2",
     "coi-serviceworker": "^0.1.6",
     "copy-webpack-plugin": "^9.0.1",
+    "eslint": "^8.8.0",
     "html-webpack-plugin": "^5.3.2",
     "meshline": "^2.0.3",
     "terser-webpack-plugin": "^5.2.4",

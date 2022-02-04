@@ -1,6 +1,10 @@
-import {MakeCoordsAbsolute, ComputeDistanceBetweenVectors} from '../util/math_helper'
+import {MakeCoordsAbsolute, ComputeDistanceBetweenVectors} from '../util/math_helper';
 
-export function ComputeApproximatePalmSizePx(coords: number[][], widthPx: number, heightPx: number) : number {
+export function ComputeApproximatePalmSizePx(
+  coords: number[][], 
+  widthPx: number, 
+  heightPx: number
+) : number {
   const absCoords = MakeCoordsAbsolute(coords, widthPx, heightPx);
   const coordPairs = [
     [20, 0],
@@ -13,8 +17,13 @@ export function ComputeApproximatePalmSizePx(coords: number[][], widthPx: number
 
   let maxDistance = -1;
   for (const p of coordPairs) {
-    maxDistance = Math.max(maxDistance, ComputeDistanceBetweenVectors(
-                                            absCoords[p[0]], absCoords[p[1]]));
+    maxDistance = Math.max(
+      maxDistance, 
+      ComputeDistanceBetweenVectors(
+        absCoords[p[0]], 
+        absCoords[p[1]]
+      )
+    );
   }
   return maxDistance;
 }

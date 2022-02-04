@@ -1,8 +1,8 @@
-import {CreateVideoElementFromStream} from './stream_helper'
-import {ExponentialMovingAverage} from '../util/ema'
-import * as THREE from 'three'
+import {CreateVideoElementFromStream} from './stream_helper';
+import {ExponentialMovingAverage} from '../util/ema';
+import * as THREE from 'three';
 
-import {MeshLine, MeshLineMaterial} from 'meshline'
+import {MeshLine, MeshLineMaterial} from 'meshline';
 
 const THREE_USE_ORTHO_CAMERA = true;
 
@@ -21,16 +21,27 @@ export class ThreeLayer {
   private camera_: THREE.PerspectiveCamera | THREE.OrthographicCamera;
   private scene_: THREE.Scene;
   private renderer_: THREE.WebGLRenderer;
-  private config_: IThreeLayerConfig
+  private config_: IThreeLayerConfig;
 
   constructor(config: IThreeLayerConfig) {
     this.config_ = config;
 
     if (THREE_USE_ORTHO_CAMERA) {
       this.camera_ = new THREE.OrthographicCamera(
-          0 , config.width, 0, config.height, 0, 1000);
+        0, 
+        config.width, 
+        0, 
+        config.height, 
+        0, 
+        1000
+      );
     } else {
-      this.camera_ = new THREE.PerspectiveCamera(45, this.config_.width / this.config_.height, 0.1, 1000);
+      this.camera_ = new THREE.PerspectiveCamera(
+        45, 
+        this.config_.width / this.config_.height, 
+        0.1, 
+        1000
+      );
       // This gives the right distance along z axes such that our content exactly fills
       // the canvas.
       const distance = this.config_.height / (2 * Math.tan( this.camera_.fov * Math.PI / 360 ) );
@@ -38,7 +49,7 @@ export class ThreeLayer {
       // Note: We use negative z coordinate for camera position since this allows us to 
       // correctly align x and y axes with the canvas (where y axis is flipped).
       this.camera_.position.set(this.config_.width / 2, this.config_.height / 2, -distance);
-      this.camera_.lookAt(this.config_.width / 2, this.config_.height / 2, 0)
+      this.camera_.lookAt(this.config_.width / 2, this.config_.height / 2, 0);
     }
 
     this.renderer_ = new THREE.WebGLRenderer({
@@ -89,12 +100,12 @@ export interface IPointLayerConfig {
  * @public
  */
 export class PointLayer implements ILayer {
-  private config_: IPointLayerConfig
-  private threeLayer_: ThreeLayer
-  private mesh_: THREE.Mesh
-  private geo_: THREE.RingGeometry
-  private mat_: THREE.MeshBasicMaterial
-  private meshAdded_: boolean
+  private config_: IPointLayerConfig;
+  private threeLayer_: ThreeLayer;
+  private mesh_: THREE.Mesh;
+  private geo_: THREE.RingGeometry;
+  private mat_: THREE.MeshBasicMaterial;
+  private meshAdded_: boolean;
 
   constructor(config: IPointLayerConfig) {
     this.threeLayer_ = new ThreeLayer({
@@ -114,10 +125,13 @@ export class PointLayer implements ILayer {
       config.lineWidth = 10;
     }
     this.config_ = config;
-    const innerRadius = this.config_.fill ? 0 : this.config_.radius - this.config_.lineWidth
+    const innerRadius = this.config_.fill ? 0 : this.config_.radius - this.config_.lineWidth;
     this.geo_ =
-        new THREE.RingGeometry(innerRadius,
-                               this.config_.radius, this.config_.segments);
+        new THREE.RingGeometry(
+          innerRadius, 
+          this.config_.radius, 
+          this.config_.segments
+        );
     this.mat_ = new THREE.MeshBasicMaterial({color: this.config_.color, side: THREE.DoubleSide});
     this.mesh_ =  new THREE.Mesh(this.geo_, this.mat_);
   }
@@ -161,12 +175,12 @@ export interface IRectLayerConfig {
  * @public
  */
 export class RectLayer implements ILayer {
-  private config_: IRectLayerConfig
-  private threeLayer_: ThreeLayer
-  private geo_: THREE.PlaneGeometry
-  private mat_: THREE.MeshBasicMaterial
-  private mesh_: THREE.Mesh
-  private meshAdded_: boolean
+  private config_: IRectLayerConfig;
+  private threeLayer_: ThreeLayer;
+  private geo_: THREE.PlaneGeometry;
+  private mat_: THREE.MeshBasicMaterial;
+  private mesh_: THREE.Mesh;
+  private meshAdded_: boolean;
 
   constructor(config: IRectLayerConfig) {
     this.threeLayer_ = new ThreeLayer({
@@ -174,7 +188,7 @@ export class RectLayer implements ILayer {
       height: config.height,
     });
     this.config_ = config;
-    this.geo_ = new THREE.PlaneGeometry(this.config_.rectWidth, this.config_.rectHeight, 1, 1)
+    this.geo_ = new THREE.PlaneGeometry(this.config_.rectWidth, this.config_.rectHeight, 1, 1);
     this.mat_ = new THREE.MeshBasicMaterial({color: this.config_.color, side: THREE.DoubleSide});
     this.mesh_ =  new THREE.Mesh(this.geo_, this.mat_);
   }
@@ -184,7 +198,7 @@ export class RectLayer implements ILayer {
       this.threeLayer_.Add(this.mesh_);
       this.meshAdded_ = true;
     }
-    const mesh = this.mesh_
+    const mesh = this.mesh_;
     if (typeof rotationInRadians === 'number') {
       mesh.rotation.z = rotationInRadians;
     }
@@ -244,7 +258,7 @@ const JOINT_LINKS = [
  * @public
  */
 export class LandmarkLayer implements ILayer {
-  private pathLayer_: PathLayer
+  private pathLayer_: PathLayer;
 
   constructor(config: ILandmarkLayerConfig) {
     if (!config.color) {
@@ -283,8 +297,6 @@ export class LandmarkLayer implements ILayer {
   Render() : void {
     this.pathLayer_.Render();
   }
-
-  Stop() : void {}
 }
 
 /**
@@ -306,9 +318,9 @@ export interface IVideoLayerConfig {
  * @public
  */
 export class VideoLayer implements ILayer {
-  private config_: IVideoLayerConfig
-  private video_: HTMLVideoElement
-  private container_: HTMLDivElement
+  private config_: IVideoLayerConfig;
+  private video_: HTMLVideoElement;
+  private container_: HTMLDivElement;
 
   constructor(config: IVideoLayerConfig, el: MediaStream | HTMLVideoElement) {
     this.config_ = config;
@@ -335,8 +347,8 @@ export class VideoLayer implements ILayer {
     // Compute crop value in pixels after scaling down/up the video. 
     const scaleX = this.config_.width / (videoWidth - 2 * cropX);
     const scaleY = this.config_.height / (videoHeight - 2 * cropY);
-    const scaledCropXPx = cropX * scaleX
-    const scaledCropYPx = cropY * scaleY
+    const scaledCropXPx = cropX * scaleX;
+    const scaledCropYPx = cropY * scaleY;
 
     // Stretch/Clinch video to accomodate for crop 
     const newWidth = this.config_.width + scaledCropXPx * 2;
@@ -425,11 +437,11 @@ export class VideoLayer implements ILayer {
   }
 
   private GetFadeoutClassName_() {
-    return `vlfadeout-${this.config_.fadeOutSeconds}`
+    return `vlfadeout-${this.config_.fadeOutSeconds}`;
   }
 
   private GetFadeInClassName_() {
-    return `vlfadein-${this.config_.fadeInSeconds}`
+    return `vlfadein-${this.config_.fadeInSeconds}`;
   }
 }
 
@@ -448,11 +460,11 @@ export interface IPathLayerConfig {
  * @public
  */
 export class PathLayer implements ILayer {
-  private config_: IPathLayerConfig
-  private threeLayer_: ThreeLayer
-  private meshes_: THREE.Mesh[]
-  private lines_: MeshLine[]
-  private mat_: MeshLineMaterial
+  private config_: IPathLayerConfig;
+  private threeLayer_: ThreeLayer;
+  private meshes_: THREE.Mesh[];
+  private lines_: MeshLine[];
+  private mat_: MeshLineMaterial;
 
   constructor(config: IPathLayerConfig) {
     if (!config.color) {
@@ -488,7 +500,13 @@ export class PathLayer implements ILayer {
   DrawPath(path: number[][]) : void {
     const points : THREE.Vector3[] = [];
     for (let i = 0; i < path.length; ++i) {
-      points.push(new THREE.Vector3(path[i][0] * this.config_.width, path[i][1] * this.config_.height, 0));
+      points.push(
+        new THREE.Vector3(
+          path[i][0] * this.config_.width, 
+          path[i][1] * this.config_.height, 
+          0
+        )
+      );
     }
 
     const line = new MeshLine();
@@ -541,11 +559,11 @@ export interface IDynamicPathLayerConfig {
  * @public
  */
 export class DynamicPathLayer implements ILayer {
-  private pathLayer_: PathLayer
-  private tmpPathLayer_: PathLayer
+  private pathLayer_: PathLayer;
+  private tmpPathLayer_: PathLayer;
   private curPath_: number[][];
-  private config_: IDynamicPathLayerConfig
-  private miniStack_: LayerStack
+  private config_: IDynamicPathLayerConfig;
+  private miniStack_: LayerStack;
 
   constructor(config: IDynamicPathLayerConfig) {
     this.pathLayer_ = new PathLayer(config.pathLayerConfig);
@@ -560,8 +578,8 @@ export class DynamicPathLayer implements ILayer {
       border: '',
       outline: '',
     });
-    this.miniStack_.AddLayer(this.pathLayer_)
-    this.miniStack_.AddLayer(this.tmpPathLayer_)
+    this.miniStack_.AddLayer(this.pathLayer_);
+    this.miniStack_.AddLayer(this.tmpPathLayer_);
     this.curPath_ = [];
   }
 
@@ -589,7 +607,7 @@ export class DynamicPathLayer implements ILayer {
       this.tmpPathLayer_.DrawPath(this.curPath_);
     } else {
       this.pathLayer_.DrawPath(this.curPath_);
-      const newPath : number[][] = []
+      const newPath : number[][] = [];
       const numKept = Math.min(2, this.curPath_.length);
       for (let i = 0; i < numKept; ++i) {
         newPath.push(this.curPath_[this.curPath_.length - 1 - numKept + i]);
@@ -622,10 +640,11 @@ export interface IFpsLayerConfig {
  * @public
  */
 export class FpsLayer {
-  private calls_: number
-  private ema_: ExponentialMovingAverage
-  private el_: HTMLDivElement 
-  private intervalHandle_: any
+  private calls_: number;
+  private ema_: ExponentialMovingAverage;
+  private el_: HTMLDivElement ;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private intervalHandle_: any;
 
   constructor(config: IFpsLayerConfig) {
     if (!config.color) {
@@ -700,9 +719,9 @@ export interface ILayer {
  * @public
  */
 export class LayerStack {
-  private config_: ILayerStackConfig
-  private layers_: ILayer[]
-  private containerEl_: HTMLDivElement
+  private config_: ILayerStackConfig;
+  private layers_: ILayer[];
+  private containerEl_: HTMLDivElement;
 
   constructor(config: ILayerStackConfig) {
     this.config_ = config;
@@ -711,8 +730,8 @@ export class LayerStack {
   }
   private CreateContainerElement_() {
     this.containerEl_ = document.createElement('div');
-    this.containerEl_.style.width = '' + this.config_.width + 'px'
-    this.containerEl_.style.height = '' + this.config_.height + 'px'
+    this.containerEl_.style.width = '' + this.config_.width + 'px';
+    this.containerEl_.style.height = '' + this.config_.height + 'px';
     if (this.config_.border) {
       this.containerEl_.style.border = this.config_.border;
     }

@@ -1,4 +1,4 @@
-import * as MathUtil from '../../util/math_helper'
+import * as MathUtil from '../../util/math_helper';
 
 /**
  * Holds information on how to transform a frame into another frame by applying
@@ -23,18 +23,29 @@ export interface IPreprocInfo {
  * Changing this value requires changes in the underlying models.
  */
 export function ComputePreprocInfoFromBoxCoords(
-    coords: number[][], ar: number[], slack: number): IPreprocInfo {
-  if (coords.length !== 6) throw 'wrong num coords'
+  coords: number[][], 
+  ar: number[], 
+  slack: number
+): IPreprocInfo {
+  if (coords.length !== 6) throw 'wrong num coords';
   const rotCalc = new SixPointRotationCalculation(coords[0], coords[1], ar);
   const rotationInRadians = rotCalc.GetRotationInRadians();
 
   const extremumCoords = [coords[2], coords[3], coords[4], coords[5]];
 
   const rotationCenter = MathUtil.DivideVectors(
-      MathUtil.AddVectors(coords[0], coords[1]), [ 2.0, 2.0 ]);
+    MathUtil.AddVectors(
+      coords[0], 
+      coords[1]
+    ), 
+    [ 2.0, 2.0 ]
+  );
 
   const araRot = new MathUtil.AspectRatioAwareRotation(
-      rotationCenter, rotationInRadians, ar);
+    rotationCenter, 
+    rotationInRadians, 
+    ar
+  );
   const rotatedExtremumCoords = araRot.Apply(extremumCoords);
 
   let topLeftBottomRight = ComputeTopLeftBottomRightFromExtremumCoords(rotatedExtremumCoords);
@@ -48,7 +59,13 @@ export function ComputePreprocInfoFromBoxCoords(
   };
 }
 
-function AddBoxSlack(boxCoords: number[][], topLeftBottomRight: number[][], ar: number[], slack: number) {
+function AddBoxSlack(
+  boxCoords: number[][], 
+  topLeftBottomRight: 
+  number[][], 
+  ar: number[], 
+  slack: number
+) {
   const absCoords = MathUtil.MakeCoordsAbsolute(boxCoords, ar[0], ar[1]);
   const slackPx = MathUtil.ComputeDistanceBetweenVectors(absCoords[0], absCoords[1]) * slack;
 
@@ -64,17 +81,28 @@ function AddBoxSlack(boxCoords: number[][], topLeftBottomRight: number[][], ar: 
  * Similar to {@link CommputePreprocInfoFromBoxCoords}.
  */
 export function ComputePreprocInfoFromLanCoords(
-    coords: number[][], ar: number[], slack: number): IPreprocInfo {
-  const palmBottom = coords[20]
+  coords: number[][], 
+  ar: number[], 
+  slack: number
+): IPreprocInfo {
+  const palmBottom = coords[20];
   const palmTop = coords[5];
 
   const rotationCenter = MathUtil.DivideVectors(
-      MathUtil.AddVectors(palmBottom, palmTop), [ 2.0, 2.0 ]);
+    MathUtil.AddVectors(
+      palmBottom, 
+      palmTop
+    ), 
+    [ 2.0, 2.0 ]
+  );
   const rotCalc = new SixPointRotationCalculation(palmBottom, palmTop, ar);
   const rotationInRadians = rotCalc.GetRotationInRadians();
 
   const araRot = new MathUtil.AspectRatioAwareRotation(
-      rotationCenter, rotationInRadians, ar);
+    rotationCenter, 
+    rotationInRadians, 
+    ar
+  );
   const rotatedCoords = araRot.Apply(coords);
 
   const ec = MathUtil.ComputeExtremumCoords(rotatedCoords);
@@ -91,8 +119,12 @@ export function ComputePreprocInfoFromLanCoords(
   };
 }
 
-function AddLanSlack(topLeftBottomRight: number[][], ar: number[],
-                     slack: number, coords: number[][]): number[][] {
+function AddLanSlack(
+  topLeftBottomRight: number[][], 
+  ar: number[], 
+  slack: number, 
+  coords: number[][]
+): number[][] {
   const distances = [];
   const absCoords = MathUtil.MakeCoordsAbsolute(coords, ar[0], ar[1]);
   distances.push(MathUtil.ComputeDistanceBetweenVectors(absCoords[20], absCoords[16]));
@@ -123,17 +155,17 @@ function AddLanSlack(topLeftBottomRight: number[][], ar: number[],
 function ComputeTopLeftBottomRightFromExtremumCoords(extremumCoords: number[][]) : number[][]{
   const topLeft = [extremumCoords[0][0], extremumCoords[2][1]];
   const bottomRight = [extremumCoords[1][0], extremumCoords[3][1]];
-  return [topLeft, bottomRight]
+  return [topLeft, bottomRight];
 }
 
 export class SixPointRotationCalculation {
-  private palmBottom_: number[]
-  private palmTop_: number[]
-  private aspectRatio_: number[]
-  private palmLine_: number[]
-  private normalizedPalmLine_: number[]
-  private mainJointLine_: number[]
-  private rotationInRadians_: number
+  private palmBottom_: number[];
+  private palmTop_: number[];
+  private aspectRatio_: number[];
+  private palmLine_: number[];
+  private normalizedPalmLine_: number[];
+  private mainJointLine_: number[];
+  private rotationInRadians_: number;
 
   constructor(palmBottom: number[], palmTop: number[], aspectRatio: number[]) {
     this.palmBottom_ = palmBottom;
@@ -170,7 +202,7 @@ export class SixPointRotationCalculation {
   }
 
   private ComputePalmLine_() {
-    this.palmLine_ = MathUtil.SubtractVectors(this.palmTop_, this.palmBottom_)
+    this.palmLine_ = MathUtil.SubtractVectors(this.palmTop_, this.palmBottom_);
     this.normalizedPalmLine_ = MathUtil.NormalizeVector(this.palmLine_);
   }
 
@@ -181,7 +213,7 @@ export class SixPointRotationCalculation {
 
   private ComputeRotation_() {
     // Coords have y axis flipped, for calculating atan2 we need to invert this.
-    const carthesianMainJointLine = [this.mainJointLine_[0], -this.mainJointLine_[1]]
+    const carthesianMainJointLine = [this.mainJointLine_[0], -this.mainJointLine_[1]];
     this.rotationInRadians_ = Math.atan2(carthesianMainJointLine[1], carthesianMainJointLine[0]);
   }
 }

@@ -1,8 +1,8 @@
-import * as tfwebgl from '@tensorflow/tfjs-backend-webgl'
-import {GraphModel, loadGraphModel} from '@tensorflow/tfjs-converter'
+import * as tfwebgl from '@tensorflow/tfjs-backend-webgl';
+import {GraphModel, loadGraphModel} from '@tensorflow/tfjs-converter';
 import * as tf from '@tensorflow/tfjs-core';
 
-import {IsWebGLOneAvailable, IsWebGLTwoAvailable} from '../../util/webgl_helper'
+import {IsWebGLOneAvailable, IsWebGLTwoAvailable} from '../../util/webgl_helper';
 
 import {
   IModelCb,
@@ -12,7 +12,7 @@ import {
   ModelInputType,
   IModelResult,
   CreateSimultaneousDownloadProgressCb,
-} from './base'
+} from './base';
 
 const DEFAULT_TFJS_WEBGL_ATTRIBUTES = {
   alpha: false,
@@ -22,7 +22,7 @@ const DEFAULT_TFJS_WEBGL_ATTRIBUTES = {
   depth: false,
   stencil: false,
   failIfMajorPerformanceCaveat: true,
-  powerPreference: "default",
+  powerPreference: 'default',
 };
 
 /**
@@ -45,21 +45,21 @@ export const enum TfjsBackendType {
    * WebGPU backend.
    * Currently not supported.
    */
-  WEBGPU = "WEBGPU",
+  WEBGPU = 'WEBGPU',
   /**
    * WebGL backend.
    */
-  WEBGL = "WEBGL",
+  WEBGL = 'WEBGL',
   /**
    * WASM backend.
    * Currently not supported.
    */
-  WASM = "WASM",
+  WASM = 'WASM',
   /**
    * CPU backend.
    * Currently not supported.
    */
-  CPU = "CPU"
+  CPU = 'CPU'
 }
 
 /**
@@ -103,7 +103,8 @@ export interface IYohaModelFiles {
 export async function DownloadYohaModelFiles(
   boxUrl: string, 
   lanUrl: string, 
-  progressCb: IModelDownloadProgressCb) : Promise<IYohaModelFiles> {
+  progressCb: IModelDownloadProgressCb
+) : Promise<IYohaModelFiles> {
   const modelFiles = await DownloadTfjsModels([boxUrl, lanUrl], progressCb);
   return {
     box: modelFiles[0],
@@ -118,8 +119,10 @@ export async function DownloadYohaModelFiles(
  * @param progressCb - A callback that is called with the cumulative download progress for all
  *                     models.
  */
-export async function DownloadTfjsModels(urls: string[],
-                                         progressCb: IModelDownloadProgressCb):
+export async function DownloadTfjsModels(
+  urls: string[],
+  progressCb: IModelDownloadProgressCb
+):
     Promise<ITfjsModelFiles[]> {
   const promises = [];
   const createModelProgressCb = CreateSimultaneousDownloadProgressCb(progressCb);
@@ -135,7 +138,10 @@ export async function DownloadTfjsModels(urls: string[],
  * @param url - The URL to the model.json file of the TFJS model.
  * @param progressCb - Callback that informs about download progress.
  */
-export async function DownloadTfjsModel(url: string, progressCb: IModelDownloadProgressCb) : Promise<ITfjsModelFiles> {
+export async function DownloadTfjsModel(
+  url: string, 
+  progressCb: IModelDownloadProgressCb
+) : Promise<ITfjsModelFiles> {
   const f = tf.env().platform.fetch;
 
   // Fetch model.json
@@ -146,8 +152,8 @@ export async function DownloadTfjsModel(url: string, progressCb: IModelDownloadP
 
   // Fetch binary chunks while keeping track of progress
   const weightPaths : string[] = modelJson.weightsManifest[0].paths;
-  const urlBase = url.substr(0, url.lastIndexOf('/') + 1);
-  const fullPaths : string[] = weightPaths.map((p: string) => urlBase + p)
+  const urlBase = url.substring(0, url.lastIndexOf('/') + 1);
+  const fullPaths : string[] = weightPaths.map((p: string) => urlBase + p);
   const fetchPromises = fullPaths.map((p: string) => f(p));
   const responses : Response[] = await Promise.all(fetchPromises);
 
@@ -159,12 +165,17 @@ export async function DownloadTfjsModel(url: string, progressCb: IModelDownloadP
   progressCb(0, totalSize);
   let totalReceived = 0;
   for (let i = 0; i < sizes.length; ++i) {
-    playloadPromises.push(ConsumeReaderWithProgress(responses[i].body.getReader(), (numRec: number) => {
-      totalReceived += numRec;
-      progressCb(totalReceived, totalSize);
-    }))
+    playloadPromises.push(
+      ConsumeReaderWithProgress(
+        responses[i].body.getReader(), 
+        (numRec: number) => {
+          totalReceived += numRec;
+          progressCb(totalReceived, totalSize);
+        }
+      )
+    );
   }
-  let payloads = await Promise.all(playloadPromises)
+  const payloads = await Promise.all(playloadPromises);
 
   const blobs = new Map<string, Blob>();
   // Cache chunks
@@ -193,12 +204,13 @@ export async function CreateTfjsModelFromModelFiles(
     const resource = requestInfo.toString();
 
     if (!modelFiles.blobs.has(resource)) {
-      throw `Requested URL ${resource} but that was not contained in modelFiles (${Array.from(modelFiles.blobs.keys()).concat(', ')})`;
+      throw `Requested URL ${resource} but that was not contained in modelFiles ` +
+            `(${Array.from(modelFiles.blobs.keys()).concat(', ')})`;
     }
     return new Response(modelFiles.blobs.get(resource), {
       status: 200
     });
-  }
+  };
   if (backendType === TfjsBackendType.WEBGL) {
     SetTfjsBackendToWebGl();
   }
@@ -244,13 +256,13 @@ export async function SetTfjsBackendToWebGl() {
   // improvements for us.
   //
   // Thus we override TFJSs determination of whether webgl is available.
-  tf.env().set("HAS_WEBGL", true);
+  tf.env().set('HAS_WEBGL', true);
   if (IsWebGLTwoAvailable()) {
-    tf.env().set("WEBGL_VERSION", 2);
+    tf.env().set('WEBGL_VERSION', 2);
   } else if (IsWebGLOneAvailable()) {
-    tf.env().set("WEBGL_VERSION", 1);
+    tf.env().set('WEBGL_VERSION', 1);
   } else {
-    throw 'No webgl available.'
+    throw 'No webgl available.';
   }
 
   const webglAttributes = JSON.parse(JSON.stringify(DEFAULT_TFJS_WEBGL_ATTRIBUTES));
@@ -307,8 +319,10 @@ export function CreateModelCbFromTfjsModel(model: ITfjsModel, execAsync: boolean
     }
     const t = CreateTensorFromModelInput(modelInput);
     const tfjsRes  = <tf.Tensor<tf.Rank>[]>(model.model.execute(t));
-    const coords = (<number[][][]><any>(execAsync ? (await tfjsRes[0].array()) : tfjsRes[0].arraySync()))[0];
-    const classes = (<number[][][]><any>(execAsync ? (await tfjsRes[1].array()) : tfjsRes[1].arraySync()))[0];
+    const coords = (<number[][][]>(
+      execAsync ? (await tfjsRes[0].array()) : tfjsRes[0].arraySync()))[0];
+    const classes = (<number[][][]>(
+      execAsync ? (await tfjsRes[1].array()) : tfjsRes[1].arraySync()))[0];
     t.dispose();
     for (const resultTensor of tfjsRes) {
       resultTensor.dispose();
@@ -318,7 +332,7 @@ export function CreateModelCbFromTfjsModel(model: ITfjsModel, execAsync: boolean
       coordinates: coords.map(c => [(c[0] + 1) / 2, (c[1] + 1) / 2]),
       // classes is list of bernulli distributions. We just keep one value of it.
       classes: classes.map(v => v[1])
-    }
+    };
   };
 }
 
@@ -326,12 +340,12 @@ function CreateTensorFromModelInput(mi: IModelInput) {
   let t : tf.Tensor;
   if (mi.type === ModelInputType.TRACK_SOURCE) {
     // Typescript complains here about offscreen canvas but it's fine to pass it.
-    // @ts-ignore 
-    t = tf.browser.fromPixels(mi.data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    t = tf.browser.fromPixels(<any>mi.data);
   } else if (mi.type === ModelInputType.TYPED_ARRAY) {
     t = CreateTensorFromTypedArrayInput(mi);
   } else {
-    throw 'not implemented'
+    throw 'not implemented';
   }
   const res = tf.reshape(t, [1, t.shape[0], t.shape[1], t.shape[2]]);
   t.dispose();
@@ -340,9 +354,9 @@ function CreateTensorFromModelInput(mi: IModelInput) {
 
 function CreateTensorFromTypedArrayInput(tai: ITypedArrayInput) {
   if (tai.data instanceof Uint8Array) {
-    return tf.tensor(tai.data, tai.shape, 'int32')
+    return tf.tensor(tai.data, tai.shape, 'int32');
   } else {
-    throw 'not implemented'
+    throw 'not implemented';
   }
 }
 
@@ -361,11 +375,14 @@ export function GetInputDimensionsFromTfjsModel(model: ITfjsModel): number[] {
   return [dims[1], dims[2]];
 }
 
-async function ConsumeReaderWithProgress(reader: ReadableStreamDefaultReader<Uint8Array>, cb: (progress: number) => void) {
+async function ConsumeReaderWithProgress(
+  reader: ReadableStreamDefaultReader<Uint8Array>, 
+  cb: (progress: number) => void
+) {
   // https://javascript.info/fetch-progress
   let receivedLength = 0; // received that many bytes at the moment
   const chunks = []; // array of received binary chunks (comprises the body)
-  while(true) {
+  while (true) {
     const {done, value} = await reader.read();
   
     if (done) {

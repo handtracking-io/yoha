@@ -5,18 +5,17 @@ import {
   ConvertLandmarkCoordinatesToGlobalCoordinates,
   MakeCoordinateOrderUserFriendly,
   AssembleTrackResultFromCoordinatesAndClasses,
-} from '../post_model/post_model'
+} from '../post_model/post_model';
 import {
   ComputePreprocInfoFromBoxCoords,
   ComputePreprocInfoFromLanCoords,
   IPreprocInfo,
-} from '../pre_model/preproc_comp'
-import {IPreprocessCb} from '../pre_model/preproc'
-import {IModelCb} from '../model/base'
+} from '../pre_model/preproc_comp';
+import {IPreprocessCb} from '../pre_model/preproc';
+import {IModelCb} from '../model/base';
 
-import {ITrackSource} from '../track_source'
-import {RequestAnimationFrame} from '../../util/animation_frame'
-
+import {ITrackSource} from '../track_source';
+import {RequestAnimationFrame} from '../../util/animation_frame';
 
 /**
  * @public
@@ -35,7 +34,7 @@ export const DEFAULT_CONFIG : IEngineConfig = {
   minHandPresenceProbabilityThreshold: 0.5,
   __userFriendlyCoordinateOrder: true,
   __boxSlack: 0.75,
-}
+};
 
 /**
  * @public
@@ -85,7 +84,7 @@ const BOX_PREPROC_INFO: IPreprocInfo = {
   flip : false,
   rotationCenter : [ 0.5, 0.5 ],
   rotationInRadians : 0.0,
-}
+};
 
 /**
  * @public
@@ -102,87 +101,100 @@ const BOX_PREPROC_INFO: IPreprocInfo = {
  * analysis.
  */
 export async function StartEngine(
-    config: IEngineConfig,
-    trackSource: ITrackSource,
-    preprocCb: IPreprocessCb,
-    boxCb: IModelCb,
-    lanCb: IModelCb,
-    resCb: ITrackResultCb,
-    ):
-    Promise<IStopEngineCb> {
-      if (!config) {
-        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-      }
-      ApplyConfigDefaults(DEFAULT_CONFIG, config);
-      const aspectRatio = [ trackSource.width, trackSource.height ];
+  config: IEngineConfig,
+  trackSource: ITrackSource,
+  preprocCb: IPreprocessCb,
+  boxCb: IModelCb,
+  lanCb: IModelCb,
+  resCb: ITrackResultCb
+): Promise<IStopEngineCb> {
+  if (!config) {
+    config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  }
+  ApplyConfigDefaults(DEFAULT_CONFIG,  config);
+  const aspectRatio = [ trackSource.width, trackSource.height ];
 
-      let stopped = false;
-      let preprocInfo = null;
+  let stopped = false;
+  let preprocInfo = null;
 
-      while (!stopped) {
-        if (!preprocInfo) {
-          await RequestAnimationFrame();
-          const boxModelInput = await preprocCb(trackSource, BOX_PREPROC_INFO);
-          const boxRes = await boxCb(boxModelInput);
-          preprocInfo = ComputePreprocInfoFromBoxCoords(boxRes.coordinates, aspectRatio,
-                                                        config.__boxSlack);
-        }
-
-        await RequestAnimationFrame();
-        const lanModelInput = await preprocCb(trackSource, preprocInfo);
-        const lanRes = await lanCb(lanModelInput);
-        const classes = lanRes.classes;
-        let coords = ConvertLandmarkCoordinatesToGlobalCoordinates(
-            preprocInfo, aspectRatio, lanRes.coordinates);
-
-        preprocInfo = ComputePreprocInfoFromLanCoords(coords, aspectRatio,
-                                                      config.__boxSlack)
-
-        coords = ApplyPostProcessingToCoordinates(config, coords);
-
-        const result =
-            AssembleTrackResultFromCoordinatesAndClasses(coords, classes);
-        resCb(result);
-
-        if (result.isHandPresentProb <
-            config.minHandPresenceProbabilityThreshold) {
-          // Make the box model look for hand again.
-          preprocInfo = null;
-        }
-      }
-
-      return () => { stopped = true; }
+  while (!stopped) {
+    if (!preprocInfo) {
+      await RequestAnimationFrame();
+      const boxModelInput = await preprocCb(trackSource, BOX_PREPROC_INFO);
+      const boxRes = await boxCb(boxModelInput);
+      preprocInfo = ComputePreprocInfoFromBoxCoords(
+        boxRes.coordinates, 
+        aspectRatio, 
+        config.__boxSlack
+      );
     }
+
+    await RequestAnimationFrame();
+    const lanModelInput = await preprocCb(trackSource, preprocInfo);
+    const lanRes = await lanCb(lanModelInput);
+    const classes = lanRes.classes;
+    let coords = ConvertLandmarkCoordinatesToGlobalCoordinates(
+      preprocInfo, 
+      aspectRatio, 
+      lanRes.coordinates
+    );
+
+    preprocInfo =
+      ComputePreprocInfoFromLanCoords(coords, aspectRatio, config.__boxSlack);
+
+    coords = ApplyPostProcessingToCoordinates(config, coords);
+
+    const result =
+        AssembleTrackResultFromCoordinatesAndClasses(coords, classes);
+    resCb(result);
+
+    if (result.isHandPresentProb < config.minHandPresenceProbabilityThreshold) {
+      // Make the box model look for hand again.
+      preprocInfo = null;
+    }
+  }
+
+  return () => { stopped = true; };
+}
 
 /**
  * Applies any post processing to the result coordinates.
  * @param config - Engine configuration. 
  * @param coords - The coordinates to transform.
  */
-export function ApplyPostProcessingToCoordinates(config: IEngineConfig,
-                                                 coords: number[][]):
-    number[][] {
-      if (config.padding) {
-        coords = ApplyPaddingToCoordinates(config.padding, coords);
-      }
-      if (config.mirrorX) {
-        coords = MirrorCoordinatesHorizontally(coords);
-      }
-      if (config.__userFriendlyCoordinateOrder) {
-        coords = MakeCoordinateOrderUserFriendly(coords);
-      }
-      return coords;
-    }
+export function ApplyPostProcessingToCoordinates(
+  config: IEngineConfig, 
+  coords: number[][]
+): number[][] {
+  if (config.padding) {
+    coords = ApplyPaddingToCoordinates(config.padding, coords);
+  }
+  if (config.mirrorX) {
+    coords = MirrorCoordinatesHorizontally(coords);
+  }
+  if (config.__userFriendlyCoordinateOrder) {
+    coords = MakeCoordinateOrderUserFriendly(coords);
+  }
+  return coords;
+}
 
-function ApplyConfigDefaults(srcConfig: any, trgConfig: any): any {
-  if (typeof srcConfig !== 'object' || srcConfig === null ||
-      srcConfig === undefined) {
+function ApplyConfigDefaults(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  srcConfig: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  trgConfig: any
+): void {
+  if (srcConfig === null || srcConfig === undefined || 
+      trgConfig === null || trgConfig === undefined) {
+    return;
+  }
+  if (typeof srcConfig !== 'object' || typeof trgConfig !== 'object') {
     return;
   }
   for (const key of Object.keys(srcConfig)) {
     if (key in trgConfig) {
       ApplyConfigDefaults(srcConfig[key], trgConfig[key]);
-    } else {
+    } else if (key) {
       trgConfig[key] = srcConfig[key];
     }
   }
