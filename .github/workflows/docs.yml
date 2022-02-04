@@ -24,4 +24,4 @@ jobs:
 
     - name: Check Docs
       run: |
-        cd ci && ./check_docs_sync.sh
+        ./ci/check_docs.sh
