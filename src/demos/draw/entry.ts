@@ -1,15 +1,22 @@
+/**
+ * Same imports are available via the Yoha npm package 
+ * https://www.npmjs.com/package/@handtracking.io/yoha.
+ */
+import {
+  DownloadYohaModelFiles,
+  StartWebGlEngine,
+  CreateMaxFpsMaxResStream,
+  MediaStreamErrorEnum, 
+  CreateVideoElementFromStream,
+} from '../../entry'
+
+/**
+ * Utilities specific to the drawing demo. Not included in the Yoha npm package right now.
+ */
 import {VideoLayer, PointLayer, DynamicPathLayer, LayerStack, LandmarkLayer, FpsLayer} from '../../util/layers'
 import {IsMobile} from '../../util/mobile_detect'
-import {MediaStreamErrorEnum, ScaleResolutionToWidth, CreateMaxFpsMaxResStream, CreateVideoElementFromStream} from '../../util/stream_helper'
+import {ScaleResolutionToWidth} from '../../util/stream_helper'
 import {ExponentialMovingAverage} from '../../util/ema'
-
-import {
-  DownloadYohaModelFiles
-} from '../../core/model/tfjs'
-
-import {
-  StartWebGlEngine,
-} from '../../core/engine/tfjs_webgl_engine'
 
 const BORDER_PADDING_FACTOR = 0.05;
 const VIDEO_WIDTH_FACTOR = 0.66;
