@@ -1,10 +1,11 @@
 {
-  "private": true,
-  "name": "yoha",
+  "private": false,
+  "name": "@handtracking.io/yoha",
   "version": "0.0.18",
   "main": "dist/entry.js",
   "types": "dist/entry.d.ts",
   "license": "MIT",
+  "keywords": ["handtracking", "hand detection", "hand pose", "hand", "tracking", "ai", "artificial intelligence"],
   "repository": {
     "url": "https://github.com/handtracking-io/yoha",
     "type": "git"
