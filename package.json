@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@handtracking.io/yoha",
-  "version": "0.0.19",
+  "version": "1.0.0",
   "main": "dist/entry.js",
   "types": "dist/entry.d.ts",
   "license": "MIT",
