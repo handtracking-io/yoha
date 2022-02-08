@@ -66,7 +66,7 @@ async function GetStreamWithConstraints(constraints: MediaStreamConstraints)
 /**
  * @public
  *
- * Creates a <video> element for the given stream
+ * Creates a `<video>` element for the given stream.
  *
  * @param stream - The stream to associate with the video element.
  */

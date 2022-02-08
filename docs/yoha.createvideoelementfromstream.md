@@ -4,7 +4,7 @@
 
 ## CreateVideoElementFromStream() function
 
-Creates a <video> element for the given stream
+Creates a `<video>` element for the given stream.
 
 <b>Signature:</b>
 
