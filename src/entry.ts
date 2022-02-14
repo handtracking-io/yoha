@@ -3,7 +3,7 @@
  * Yoha hand tracking library for precision interactions.
  */
 export {
-  StartWebGlEngine
+  StartTfjsWebglEngine
 } from './core/engine/tfjs_webgl_engine';
 export {
   IEngineConfig, 
@@ -12,12 +12,12 @@ export {
 } from './core/engine/base';
 
 export {
-  IYohaModelFiles,
-  DownloadYohaModelFiles, 
-  ITfjsModelFiles,
+  IYohaTfjsModelBlobs,
+  DownloadMultipleYohaTfjsModelBlobs, 
 } from './core/model/tfjs';
 export {
   IModelDownloadProgressCb, 
+  IBlobs,
 } from './core/model/base';
 
 export {
