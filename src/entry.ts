@@ -4,7 +4,10 @@
  */
 export {
   StartTfjsWebglEngine
-} from './core/engine/tfjs_webgl_engine';
+} from './core/engine/tfjs_webgl';
+export {
+  StartTfjsWasmEngine
+} from './core/engine/tfjs_wasm';
 export {
   IEngineConfig, 
   ITrackResultCb, 
@@ -14,6 +17,7 @@ export {
 export {
   IYohaTfjsModelBlobs,
   DownloadMultipleYohaTfjsModelBlobs, 
+  ITfjsWasmBackendConfig,
 } from './core/model/tfjs';
 export {
   IModelDownloadProgressCb, 

@@ -157,6 +157,7 @@ export interface IBlobs {
  *                 by {@link downloadModelsCb}.
  * @param progressCb - A callback that is called with the cumulative download progress for all
  *                     models.
+ * @param downloadModelsCb - A callback that is called to download multiple models simultaneously.
  */
 export async function DownloadMultipleYohaModelBlobs(
   boxUrl: string, 

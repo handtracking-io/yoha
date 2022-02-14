@@ -12,6 +12,7 @@
       "sourceMap": true,
       "types": [
         "@types/offscreencanvas",
+        "@types/emscripten",
         "@types/long"
       ],
       "lib": [

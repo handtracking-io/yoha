@@ -15,7 +15,8 @@ Yoha hand tracking library for precision interactions.
 |  [CreateVideoElementFromStream(stream)](./yoha.createvideoelementfromstream.md) | Creates a <code>&lt;video&gt;</code> element for the given stream. |
 |  [DownloadMultipleYohaTfjsModelBlobs(boxUrl, lanUrl, progressCb)](./yoha.downloadmultipleyohatfjsmodelblobs.md) | Downloads the Yoha tfjs models. |
 |  [MirrorCoordinatesHorizontally(coords)](./yoha.mirrorcoordinateshorizontally.md) | Mirrors result coordinates along the y axis i.e. <code>[x, y]</code> becomes <code>[1 - x, y]</code>. |
-|  [StartTfjsWebglEngine(config, trackSource, yohaModels, resCb)](./yoha.starttfjswebglengine.md) | Starts an analysis loop on a track source (e.g. a <code>&lt;video&gt;</code> element) using the TFJS WebGl backend. |
+|  [StartTfjsWasmEngine(engineConfig, backendConfig, trackSource, yohaModels, resCb)](./yoha.starttfjswasmengine.md) | Starts an analysis loop on a track source (e.g. a <code>&lt;video&gt;</code> element) using the tfjs wasm backend. |
+|  [StartTfjsWebglEngine(engineConfig, trackSource, yohaModels, resCb)](./yoha.starttfjswebglengine.md) | Starts an analysis loop on a track source (e.g. a <code>&lt;video&gt;</code> element) using the tfjs webgl backend. |
 
 ## Interfaces
 
@@ -26,6 +27,7 @@ Yoha hand tracking library for precision interactions.
 |  [IMediaStreamResult](./yoha.imediastreamresult.md) | Result of trying to obtain a MediaStream. |
 |  [IPoseProbabilities](./yoha.iposeprobabilities.md) | The detected hand poses. |
 |  [IStopEngineCb](./yoha.istopenginecb.md) | A callback that when invoked stops the engine. |
+|  [ITfjsWasmBackendConfig](./yoha.itfjswasmbackendconfig.md) | Configuration that is specific to the tfjs wasm backend. |
 |  [ITrackResult](./yoha.itrackresult.md) | Hand tracking results. |
 |  [IYohaTfjsModelBlobs](./yoha.iyohatfjsmodelblobs.md) | The two models required for running the Yoha engine. |
 

@@ -1,12 +1,12 @@
-export function IsWebGLOneOrTwoAvailable() : boolean {
-  return IsWebGLOneAvailable() || IsWebGLTwoAvailable();
+export function IsWebglOneOrTwoAvailable() : boolean {
+  return IsWebglOneAvailable() || IsWebglTwoAvailable();
 }
 
-export function IsWebGLTwoAvailable() : boolean {
+export function IsWebglTwoAvailable() : boolean {
   return !!document.createElement('canvas').getContext('webgl2');
 }
 
-export function IsWebGLOneAvailable() : boolean {
+export function IsWebglOneAvailable() : boolean {
   return !!document.createElement('canvas').getContext('webgl');
 }
 

@@ -8,11 +8,11 @@ import {
 import {ITrackSource} from '../track_source';
 
 import {
-  TfjsBackendType,
-  IYohaTfjsModelBlobs,
-  CreateTfjsModelFromModelBlobs,
+  IInternalTfjsBackendConfig,
   CreateModelCbFromTfjsModel,
   GetInputDimensionsFromTfjsModel,
+  CreateTfjsModelFromModelBlobs,
+  IYohaTfjsModelBlobs,
 } from '../model/tfjs';
 
 import {
@@ -21,10 +21,11 @@ import {
 
 /**
  * @public
- * Starts an analysis loop on a track source (e.g. a `<video>` element) using the TFJS WebGl 
+ * Starts an analysis loop on a track source (e.g. a `<video>` element) using a tfjs 
  * backend.
  *
- * @param config - Engine configuration.
+ * @param engineConfig - Engine configuration.
+ * @param backendConfig - Backend configuration.
  * @param trackSource - The element to be analyzed.
  * @param resCb - Callback that is called with hand tracking results. The callback may be called
  *                with high frequency.
@@ -32,15 +33,16 @@ import {
  *
  * @returns Promise that resolves with a callback that can be used to stop the analysis.
  */
-export async function StartTfjsWebglEngine(
-  config: IEngineConfig, 
-  trackSource: ITrackSource, 
+export async function StartTfjsEngine(
+  engineConfig: IEngineConfig, 
+  backendConfig: IInternalTfjsBackendConfig,
   yohaModels: IYohaTfjsModelBlobs,
+  trackSource: ITrackSource, 
   resCb: ITrackResultCb,
 ) : Promise<IStopEngineCb> {
   const [boxModel, lanModel] = await Promise.all([
-    CreateTfjsModelFromModelBlobs(yohaModels.box, TfjsBackendType.WEBGL),  
-    CreateTfjsModelFromModelBlobs(yohaModels.lan, TfjsBackendType.WEBGL),
+    CreateTfjsModelFromModelBlobs(yohaModels.box, backendConfig),  
+    CreateTfjsModelFromModelBlobs(yohaModels.lan, backendConfig),
   ]);
 
   const boxDims = GetInputDimensionsFromTfjsModel(boxModel);
@@ -59,5 +61,5 @@ export async function StartTfjsWebglEngine(
   const boxCb = CreateModelCbFromTfjsModel(boxModel, true);
   const lanCb = CreateModelCbFromTfjsModel(lanModel, true);
 
-  return StartEngine(config, trackSource, preprocCb, boxCb, lanCb, resCb);
+  return StartEngine(engineConfig, trackSource, preprocCb, boxCb, lanCb, resCb);
 }

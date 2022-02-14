@@ -1,9 +1,10 @@
 import * as tfwebgl from '@tensorflow/tfjs-backend-webgl';
+import * as tfwasm from '@tensorflow/tfjs-backend-wasm';
 import {GraphModel, loadGraphModel} from '@tensorflow/tfjs-converter';
 import * as tf from '@tensorflow/tfjs-core';
 
-import {IsWebGLOneAvailable, IsWebGLTwoAvailable} from '../../util/webgl_helper';
-
+import {ApplyConfigDefaults} from '../../util/config_helper';
+import {IsWebglOneAvailable, IsWebglTwoAvailable} from '../../util/webgl_helper';
 import {
   IModelCb,
   IModelDownloadProgressCb,
@@ -40,7 +41,7 @@ export const enum TfjsBackendType {
    */
   WEBGPU = 'WEBGPU',
   /**
-   * WebGL backend.
+   * Webgl backend.
    */
   WEBGL = 'WEBGL',
   /**
@@ -52,7 +53,13 @@ export const enum TfjsBackendType {
    * CPU backend.
    * Currently not supported.
    */
-  CPU = 'CPU'
+  CPU = 'CPU',
+  /**
+   * Experimental.
+   * No backend is set explicitly by Yoha. You have to set up tfjs yourself with the backend of 
+   * your choice before instantiating the Yoha models. 
+   */
+  MANUAL = 'MANUAL',
 }
 
 /**
@@ -152,6 +159,65 @@ export async function DownloadTfjsModel(
   return res;
 }
 
+export interface ITfjsManualBackendConfig {
+  backendType: TfjsBackendType.MANUAL
+}
+
+export interface IInternalTfjsManualBackendConfig {
+  backendType: TfjsBackendType.MANUAL
+}
+
+
+export interface ITfjsWebglBackendConfig {
+  backendType: TfjsBackendType.WEBGL
+}
+
+export interface IInternalTfjsWebglBackendConfig {
+  backendType: TfjsBackendType.WEBGL
+}
+
+/**
+ * @public
+ * Configuration that is specific to the tfjs wasm backend. 
+ * 
+ */
+export interface ITfjsWasmBackendConfig {
+  /**
+   * See https://github.com/tensorflow/tfjs/tree/master/tfjs-backend-wasm#using-bundlers
+   */
+  wasmPaths: string
+}
+
+export interface IInternalTfjsWasmBackendConfig {
+  backendType: TfjsBackendType.WASM
+  wasmPaths: string
+}
+
+/**
+ * We create external and interal configs just so that users don't have to deal with
+ * setting the 'backendType' fields...
+ */
+export type ITfjsBackendConfig = ITfjsWebglBackendConfig | 
+                                 ITfjsWasmBackendConfig | 
+                                 ITfjsManualBackendConfig;
+
+export type IInternalTfjsBackendConfig = IInternalTfjsWebglBackendConfig | 
+                                         IInternalTfjsWasmBackendConfig |
+                                         IInternalTfjsManualBackendConfig;
+
+export const DEFAULT_TFJS_MANUAL_BACKEND_CONFIG = {
+  type: TfjsBackendType.MANUAL,
+};
+
+export const DEFAULT_TFJS_WEBGL_BACKEND_CONFIG = {
+  type: TfjsBackendType.WEBGL,
+};
+
+export const DEFAULT_TFJS_WASM_BACKEND_CONFIG = {
+  type: TfjsBackendType.WASM,
+  wasmPath: ''
+};
+
 /**
  * Creates a tfjs graph model from tfjs model files.
  * @param modelBlobs - The model files from which to create a tfjs model.
@@ -159,19 +225,40 @@ export async function DownloadTfjsModel(
  */
 export async function CreateTfjsModelFromModelBlobs(
   modelBlobs: IBlobs,
-  backendType: TfjsBackendType
+  config: IInternalTfjsBackendConfig,
 ) : Promise<ITfjsModel> {
-  const cacheReadingFetchFunc = CreateCacheReadingFetchFunc(modelBlobs);
-  if (backendType === TfjsBackendType.WEBGL) {
-    SetTfjsBackendToWebGl();
+  const defaultConfig = GetTfjsDefaultBackendConfigForBackendType(config.backendType);
+  config = ApplyConfigDefaults(defaultConfig, config);
+  const t = config.backendType;
+  if (t === TfjsBackendType.WEBGL) {
+    await SetTfjsBackendToWebgl();
+  } else if (t === TfjsBackendType.WASM) {
+    await SetTfjsBackendToWasm(config.wasmPaths);
+  } else if (t === TfjsBackendType.MANUAL) {
+    // no-op
+  } else {
+    throw 'Backend ' + t + ' is currently not supported.';
   }
+  const cacheReadingFetchFunc = CreateCacheReadingFetchFunc(modelBlobs);
   const graphModel = await loadGraphModel(ExtractModelJsonUrlFromModelBlobs(modelBlobs), {
     fetchFunc: cacheReadingFetchFunc
   });
   return {
     model: graphModel,
-    backendType,
+    backendType: t,
   };
+}
+
+function GetTfjsDefaultBackendConfigForBackendType(backendType: TfjsBackendType) {
+  if (backendType === TfjsBackendType.WEBGL) {
+    return DEFAULT_TFJS_WEBGL_BACKEND_CONFIG;
+  } else if (backendType === TfjsBackendType.WASM) {
+    return DEFAULT_TFJS_WASM_BACKEND_CONFIG;
+  } else if (backendType === TfjsBackendType.MANUAL) {
+    return DEFAULT_TFJS_MANUAL_BACKEND_CONFIG;
+  } else {
+    throw 'Backend ' + backendType + ' is currently not supported.';
+  }
 }
 
 function ExtractModelJsonUrlFromModelBlobs(modelBlobs: IBlobs) {
@@ -193,7 +280,7 @@ function ExtractModelJsonUrlFromModelBlobs(modelBlobs: IBlobs) {
 /**
  * Sets the tfjs webgl backend.
  */
-export async function SetTfjsBackendToWebGl() {
+export async function SetTfjsBackendToWebgl() {
   // Tfjs has its own mechanism for determining whether webgl is available. In
   // particular they create a canvas with a webgl context and a custom set of
   // webgl attributes among which they use 'failIfMajorPerformanceCaveat' ===
@@ -208,9 +295,9 @@ export async function SetTfjsBackendToWebGl() {
   //
   // Thus we override tfjs determination of whether webgl is available.
   tf.env().set('HAS_WEBGL', true);
-  if (IsWebGLTwoAvailable()) {
+  if (IsWebglTwoAvailable()) {
     tf.env().set('WEBGL_VERSION', 2);
-  } else if (IsWebGLOneAvailable()) {
+  } else if (IsWebglOneAvailable()) {
     tf.env().set('WEBGL_VERSION', 1);
   } else {
     throw 'No webgl available.';
@@ -223,7 +310,7 @@ export async function SetTfjsBackendToWebGl() {
   tf.registerBackend('webgl', () => {
     const canvas = document.createElement('canvas');
     let ctx : WebGLRenderingContext;
-    if (IsWebGLTwoAvailable()) {
+    if (IsWebglTwoAvailable()) {
       // in tfjs source code they also do this cast
       ctx = <WebGLRenderingContext>(canvas.getContext('webgl2', webglAttributes));
     } else {
@@ -233,7 +320,19 @@ export async function SetTfjsBackendToWebGl() {
     const backend = new tfwebgl.MathBackendWebGL(new tfwebgl.GPGPUContext(ctx));
     return backend;
   }, 999);
-  tf.setBackend('webgl');
+  await tf.setBackend('webgl');
+  await tf.ready();
+}
+
+/**
+ * Sets the tfjs wasm backend.
+ */
+export async function SetTfjsBackendToWasm(wasmPaths: string) {
+  if (!wasmPaths) {
+    throw '`wasmPaths` not set. Got ' + wasmPaths;
+  }
+  tfwasm.setWasmPaths(wasmPaths);
+  await tf.setBackend('wasm');
   await tf.ready();
 }
 
@@ -253,7 +352,7 @@ function GetCurrentTfjsBackend() : TfjsBackendType {
 }
 
 function DoesTfjsBackendTypeMatchCurrentlySetBackend(bt: TfjsBackendType) : boolean {
-  return GetCurrentTfjsBackend() === bt;
+  return GetCurrentTfjsBackend() === bt || bt === TfjsBackendType.MANUAL;
 }
 
 /**
@@ -269,12 +368,21 @@ export function CreateModelCbFromTfjsModel(model: ITfjsModel, execAsync: boolean
         ' but the backend was switched to ' + GetCurrentTfjsBackend());
     }
     const t = CreateTensorFromModelInput(modelInput);
-    const tfjsRes  = <tf.Tensor<tf.Rank>[]>(model.model.execute(t, ['coordinates', 'classes']));
-    const coords = (<number[][][]>(
-      execAsync ? (await tfjsRes[0].array()) : tfjsRes[0].arraySync()))[0];
-    const classes = (<number[][][]>(
-      execAsync ? (await tfjsRes[1].array()) : tfjsRes[1].arraySync()))[0];
+    const tfjsRes  = <tf.Tensor<tf.Rank>[]>(model.model.execute(
+      t,
+      ['coordinates', 'classes']
+    ));
     t.dispose();
+    const readOutputFn = async (index: number) : Promise<number[][]> => {
+      const outputEl = tfjsRes[index];
+      const batchedRes = <number[][][]>(
+        execAsync ? (await outputEl.array()) : outputEl.arraySync());
+      const noBatchDimRes = batchedRes[0];
+      return noBatchDimRes;
+    };
+    const [coords, classes] = await Promise.all(
+      [readOutputFn(0), readOutputFn(1)]
+    );
     for (const resultTensor of tfjsRes) {
       resultTensor.dispose();
     }

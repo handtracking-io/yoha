@@ -54,6 +54,11 @@ export interface IStopEngineCb {
 }
 
 // @public
+export interface ITfjsWasmBackendConfig {
+    wasmPaths: string;
+}
+
+// @public
 export interface ITrackResult {
     coordinates: number[][];
     isHandPresentProb: number;
@@ -71,6 +76,7 @@ export type ITrackSource = HTMLCanvasElement | HTMLVideoElement | HTMLImageEleme
 export interface IYohaTfjsModelBlobs {
     box: IBlobs;
     lan: IBlobs;
+    modelType: 'tfjs';
 }
 
 // @public
@@ -91,6 +97,9 @@ export function MirrorCoordinatesHorizontally(coords: number[][]): number[][];
 export type ObjValues<T> = T[keyof T];
 
 // @public
-export function StartTfjsWebglEngine(config: IEngineConfig, trackSource: ITrackSource, yohaModels: IYohaTfjsModelBlobs, resCb: ITrackResultCb): Promise<IStopEngineCb>;
+export function StartTfjsWasmEngine(engineConfig: IEngineConfig, backendConfig: ITfjsWasmBackendConfig, trackSource: ITrackSource, yohaModels: IYohaTfjsModelBlobs, resCb: ITrackResultCb): Promise<IStopEngineCb>;
+
+// @public
+export function StartTfjsWebglEngine(engineConfig: IEngineConfig, trackSource: ITrackSource, yohaModels: IYohaTfjsModelBlobs, resCb: ITrackResultCb): Promise<IStopEngineCb>;
 
 ```
