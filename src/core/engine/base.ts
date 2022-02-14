@@ -13,9 +13,9 @@ import {
 } from '../pre_model/preproc_comp';
 import {IPreprocessCb} from '../pre_model/preproc';
 import {IModelCb} from '../model/base';
-
 import {ITrackSource} from '../track_source';
 import {RequestAnimationFrame} from '../../util/animation_frame';
+import {ApplyConfigDefaults} from '../../util/config_helper';
 
 /**
  * @public
@@ -107,10 +107,7 @@ export async function StartEngine(
   lanCb: IModelCb,
   resCb: ITrackResultCb
 ): Promise<IStopEngineCb> {
-  if (!config) {
-    config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-  }
-  ApplyConfigDefaults(DEFAULT_CONFIG,  config);
+  config = ApplyConfigDefaults(DEFAULT_CONFIG,  config);
   const aspectRatio = [ trackSource.width, trackSource.height ];
 
   let stopped = false;
@@ -177,24 +174,3 @@ export function ApplyPostProcessingToCoordinates(
   return coords;
 }
 
-function ApplyConfigDefaults(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  srcConfig: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  trgConfig: any
-): void {
-  if (srcConfig === null || srcConfig === undefined || 
-      trgConfig === null || trgConfig === undefined) {
-    return;
-  }
-  if (typeof srcConfig !== 'object' || typeof trgConfig !== 'object') {
-    return;
-  }
-  for (const key of Object.keys(srcConfig)) {
-    if (key in trgConfig) {
-      ApplyConfigDefaults(srcConfig[key], trgConfig[key]);
-    } else if (key) {
-      trgConfig[key] = srcConfig[key];
-    }
-  }
-}

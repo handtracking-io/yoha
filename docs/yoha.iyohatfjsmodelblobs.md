@@ -18,4 +18,5 @@ export interface IYohaTfjsModelBlobs
 |  --- | --- | --- |
 |  [box](./yoha.iyohatfjsmodelblobs.box.md) | [IBlobs](./yoha.iblobs.md) | The file blobs of the box model for detecting initial hand position within stream. |
 |  [lan](./yoha.iyohatfjsmodelblobs.lan.md) | [IBlobs](./yoha.iblobs.md) | The file blobs of the landmark model for detecting landmark locations and detecting hand poses. |
+|  [modelType](./yoha.iyohatfjsmodelblobs.modeltype.md) | 'tfjs' | This field adds some type safety to protect against mismatching blobs/backends. |
 

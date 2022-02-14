@@ -6,7 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const PRODUCTION = !!process.env.PRODUCTION;
 
-const DEMOS = ['tfjs_webgl'];
+const DEMOS = ['tfjs_webgl', 'tfjs_wasm'];
 
 module.exports = (env) => {
   const config = {
@@ -42,8 +42,7 @@ module.exports = (env) => {
       new CopyWebpackPlugin({
         patterns: [
           // FIXME these wildcards will load some unnecessary stuff right now
-          {from: 'node_modules/@tensorflow/tfjs-tflite/dist/*.wasm', to: './[name][ext]'},
-          {from: 'node_modules/@tensorflow/tfjs-tflite/dist/*.js', to: './[name][ext]'},
+          {from: 'node_modules/@tensorflow/tfjs-backend-wasm/dist/*.wasm'},
           {from: 'models/lan', to: 'lan/'},
           {from: 'models/box', to: 'box/'},
         ]
