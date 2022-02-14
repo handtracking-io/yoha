@@ -6,12 +6,13 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const PRODUCTION = !!process.env.PRODUCTION;
 
+const DEMOS = ['tfjs_webgl'];
+
 module.exports = (env) => {
   const config = {
     mode: PRODUCTION ? 'production' : 'development',
     devtool: 'inline-source-map',
     devServer: {
-      open: true,
       headers: {
         // These two headers are requried for cross origin isolation.
         'Cross-Origin-Opener-Policy': 'same-origin',
@@ -33,13 +34,16 @@ module.exports = (env) => {
       extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
-      new HtmlWebpackPlugin({
+      ...DEMOS.map((d) => new HtmlWebpackPlugin({
         template: 'src/demos/draw/index.html',
-        filename: 'index.html',
-        chunks: ['draw'],
-      }),
+        filename: `${d}_draw.html`,
+        chunks: [`${d}_draw`],
+      })),
       new CopyWebpackPlugin({
         patterns: [
+          // FIXME these wildcards will load some unnecessary stuff right now
+          {from: 'node_modules/@tensorflow/tfjs-tflite/dist/*.wasm', to: './[name][ext]'},
+          {from: 'node_modules/@tensorflow/tfjs-tflite/dist/*.js', to: './[name][ext]'},
           {from: 'models/lan', to: 'lan/'},
           {from: 'models/box', to: 'box/'},
         ]
@@ -70,10 +74,15 @@ module.exports = (env) => {
       ],
     },
     entry: {
-      draw: {
-        import: './src/demos/draw/entry.ts',
-        filename: 'draw.js',
-      },
+      ...DEMOS.map((d) => {
+        const chunkName = `${d}_draw`;
+        return {
+          [chunkName]: {
+            import: `./src/demos/draw/${d}_entry.ts`,
+            filename: `${d}_draw.js`,
+          }
+        }
+      }).reduce((cur, prev, index) => {return {...prev, ...cur};}, {})
     }
   };
 

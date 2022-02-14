@@ -16,7 +16,12 @@ export function CreateMaxFpsMaxResStream(): Promise<IMediaStreamResult>;
 export function CreateVideoElementFromStream(stream: MediaStream): HTMLVideoElement;
 
 // @public
-export function DownloadYohaModelFiles(boxUrl: string, lanUrl: string, progressCb: IModelDownloadProgressCb): Promise<IYohaModelFiles>;
+export function DownloadMultipleYohaTfjsModelBlobs(boxUrl: string, lanUrl: string, progressCb: IModelDownloadProgressCb): Promise<IYohaTfjsModelBlobs>;
+
+// @public
+export interface IBlobs {
+    blobs: Map<string, Blob>;
+}
 
 // @public
 export interface IEngineConfig {
@@ -49,11 +54,6 @@ export interface IStopEngineCb {
 }
 
 // @public
-export interface ITfjsModelFiles {
-    blobs: Map<string, Blob>;
-}
-
-// @public
 export interface ITrackResult {
     coordinates: number[][];
     isHandPresentProb: number;
@@ -68,9 +68,9 @@ export type ITrackResultCb = (res: ITrackResult) => void;
 export type ITrackSource = HTMLCanvasElement | HTMLVideoElement | HTMLImageElement | OffscreenCanvas;
 
 // @public
-export interface IYohaModelFiles {
-    box: ITfjsModelFiles;
-    lan: ITfjsModelFiles;
+export interface IYohaTfjsModelBlobs {
+    box: IBlobs;
+    lan: IBlobs;
 }
 
 // @public
@@ -91,6 +91,6 @@ export function MirrorCoordinatesHorizontally(coords: number[][]): number[][];
 export type ObjValues<T> = T[keyof T];
 
 // @public
-export function StartWebGlEngine(config: IEngineConfig, trackSource: ITrackSource, yohaModel: IYohaModelFiles, resCb: ITrackResultCb): Promise<IStopEngineCb>;
+export function StartTfjsWebglEngine(config: IEngineConfig, trackSource: ITrackSource, yohaModels: IYohaTfjsModelBlobs, resCb: ITrackResultCb): Promise<IStopEngineCb>;
 
 ```

@@ -1,13 +1,22 @@
 /**
+ * This file contains code for the draw demo. You can find a live version at
+ * https://handtracking.io/draw_demo
+ *
+ * Note that the complete demo consists out of this file and one of the `*_entry` files contained
+ * in this directory (there is one for each backend Yoha supports).
+ */
+/**
  * Same imports are available via the Yoha npm package 
  * https://www.npmjs.com/package/%40handtracking.io/yoha
  */
 import {
-  DownloadYohaModelFiles,
-  StartWebGlEngine,
   CreateMaxFpsMaxResStream,
   MediaStreamErrorEnum, 
   CreateVideoElementFromStream,
+  IModelDownloadProgressCb,
+  ITrackResultCb,
+  ITrackSource,
+  IEngineConfig,
 } from '../../entry';
 
 /**
@@ -21,6 +30,7 @@ import {
   LandmarkLayer, 
   FpsLayer
 } from '../../util/layers';
+
 import {IsMobile} from '../../util/mobile_detect';
 import {ScaleResolutionToWidth} from '../../util/stream_helper';
 import {ExponentialMovingAverage} from '../../util/ema';
@@ -28,7 +38,20 @@ import {ExponentialMovingAverage} from '../../util/ema';
 const BORDER_PADDING_FACTOR = 0.05;
 const VIDEO_WIDTH_FACTOR = 0.66;
 
-async function CreateDrawDemo() {
+/**
+ * The purpose of this interface is to encapsulate backend specific things
+ * into separate files (e.g. tfjs_webgl_entry.ts) and reuse the code in this file.
+ */
+interface IDownloadAndStartEngineCb {
+  (
+    src: ITrackSource,
+    config: IEngineConfig,
+    progressCb: IModelDownloadProgressCb, 
+    resultCb: ITrackResultCb
+  ) : void
+}
+
+export async function CreateDrawDemo(startCb: IDownloadAndStartEngineCb) {
   if (IsMobile({tablet: true})) {
     document.getElementById('mobile').style.display = '';
   }
@@ -37,7 +60,6 @@ async function CreateDrawDemo() {
     const progress = received / total;
     document.getElementById('progress').innerText = `${Math.round(progress * 100)}%`;
   };
-  const modelFiles = await DownloadYohaModelFiles('box/model.json', 'lan/model.json', progressCb);
   
   const config = {
     // Webcam video is usually flipped so we want the coordinates to be flipped as well.
@@ -88,7 +110,9 @@ async function CreateDrawDemo() {
   // (Setting the parameter to 1 disables the smoothing if you'd like to try without it.)
   const pos = new ExponentialCoordinateAverage(0.85);
 
-  StartWebGlEngine(config, src, modelFiles, e => {
+  // StartTfliteEngine(config, src, models, e => {
+  startCb(src, config, progressCb, e => {
+    fpsLayer.RegisterCall();
     // console.log(e.isHandPresentProb);
     if (Math.round(e.isHandPresentProb)) {
       const cursorPos = pos.Add(ComputeCursorPositionFromCoordinates(e.coordinates));
@@ -112,8 +136,9 @@ async function CreateDrawDemo() {
       // videoLayer.FadeOut();
       landmarkLayer.Draw(e.coordinates);
       landmarkLayer.Render();
-      fpsLayer.RegisterCall();
     } else {
+      pointLayer.Clear();
+      pointLayer.Render();
       pathLayer.EndPath();
       landmarkLayer.Clear();
       landmarkLayer.Render();
@@ -198,5 +223,3 @@ function CreateLayerStack(video: HTMLVideoElement, width: number, height: number
   return {stack, videoLayer, pointLayer, pathLayer, landmarkLayer, fpsLayer};
 }
 
-
-CreateDrawDemo();

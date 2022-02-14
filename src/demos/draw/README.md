@@ -6,6 +6,13 @@ The demo uses some utilities mainly for visualization that are not part of the Y
 right now. If you think it would make sense to include some of the utilities in the Yoha packge 
 feel free to give feedback.
 
+## Different Backends
+
+Note that the demo is available for all supported backends. Each one has separate
+`*_entry.ts` file.
+
+Similarly there is a separate HTML file for each backend. E.g. `/tfjs_webgl_draw_.html`
+
 # Running
 
 Install dependencies: `yarn`

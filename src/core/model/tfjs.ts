@@ -11,7 +11,11 @@ import {
   ITypedArrayInput,
   ModelInputType,
   IModelResult,
-  CreateSimultaneousDownloadProgressCb,
+  DownloadMultipleYohaModelBlobs,
+  DownloadMultipleModelBlobs,
+  DownloadBlobs,
+  IBlobs,
+  CreateCacheReadingFetchFunc,
 } from './base';
 
 const DEFAULT_TFJS_WEBGL_ATTRIBUTES = {
@@ -27,18 +31,7 @@ const DEFAULT_TFJS_WEBGL_ATTRIBUTES = {
 
 /**
  * @public
- * Collection of files belonging to a TFJS model.
- */
-export interface ITfjsModelFiles {
-  /**
-   * Maps TFJS model URLs to corresponding byte blob.
-   */
-  blobs: Map<string, Blob>
-}
-
-/**
- * @public
- * The computational backend type to use as the TFJS backend.
+ * The computational backend type to use as the tfjs backend.
  */
 export const enum TfjsBackendType {
   /**
@@ -64,15 +57,15 @@ export const enum TfjsBackendType {
 
 /**
  * @public
- * A TFJS model.
+ * A tfjs model.
  */
 export interface ITfjsModel {
   /**
-   * The TFJS model.
+   * The tfjs model.
    */
   model: GraphModel
   /**
-   * The TFJS backend type with which this model was created.
+   * The tfjs backend type with which this model was created.
    */
   backendType: TfjsBackendType
 }
@@ -81,67 +74,65 @@ export interface ITfjsModel {
  * @public
  * The two models required for running the Yoha engine.
  */
-export interface IYohaModelFiles {
+export interface IYohaTfjsModelBlobs {
+  /**
+   * This field adds some type safety to protect against mismatching blobs/backends.
+   */
+  modelType: 'tfjs'
   /**
    * The file blobs of the box model for detecting initial hand position within stream.
    */
-  box: ITfjsModelFiles
+  box: IBlobs
   /**
    * The file blobs of the landmark model for detecting landmark locations and detecting hand poses.
    */
-  lan: ITfjsModelFiles
+  lan: IBlobs
 }
 
 /**
  * @public
- * Downloads a list of TFJS models.
+ * Downloads the Yoha tfjs models.
  * @param boxUrl - Url to model.json file of box model.
  * @param lanUrl - Url to model.json file of landmark model.
  * @param progressCb - A callback that is called with the cumulative download progress for all
  *                     models.
  */
-export async function DownloadYohaModelFiles(
+export async function DownloadMultipleYohaTfjsModelBlobs(
   boxUrl: string, 
   lanUrl: string, 
   progressCb: IModelDownloadProgressCb
-) : Promise<IYohaModelFiles> {
-  const modelFiles = await DownloadTfjsModels([boxUrl, lanUrl], progressCb);
+) : Promise<IYohaTfjsModelBlobs> {
   return {
-    box: modelFiles[0],
-    lan: modelFiles[1],
+    ...await DownloadMultipleYohaModelBlobs(boxUrl, lanUrl, progressCb, DownloadTfjsModelBlobs),
+    modelType: 'tfjs',
   };
 }
 
 /**
  * @public
- * Downloads a list of TFJS models.
+ * Downloads a list of tfjs models.
  * @param urls - A list of URLs. Each URL must point to a model.json file.
  * @param progressCb - A callback that is called with the cumulative download progress for all
  *                     models.
  */
-export async function DownloadTfjsModels(
+export async function DownloadTfjsModelBlobs(
   urls: string[],
   progressCb: IModelDownloadProgressCb
 ):
-    Promise<ITfjsModelFiles[]> {
-  const promises = [];
-  const createModelProgressCb = CreateSimultaneousDownloadProgressCb(progressCb);
-  for (const url of urls) {
-    promises.push(DownloadTfjsModel(url, createModelProgressCb()));
-  }
-  return Promise.all(promises);
+    Promise<IBlobs[]> {
+  return DownloadMultipleModelBlobs(urls, progressCb, DownloadTfjsModel);
 }
 
 /**
  * @public
- * Downloads a TFJS model and reports download progress via a callback.
- * @param url - The URL to the model.json file of the TFJS model.
+ * Downloads a tfjs model and reports download progress via a callback.
+ * @param url - The URL to the model.json file of the tfjs model.
  * @param progressCb - Callback that informs about download progress.
  */
 export async function DownloadTfjsModel(
   url: string, 
   progressCb: IModelDownloadProgressCb
-) : Promise<ITfjsModelFiles> {
+) : Promise<IBlobs> {
   const f = tf.env().platform.fetch;
 
   // Fetch model.json
@@ -154,67 +145,27 @@ export async function DownloadTfjsModel(
   const weightPaths : string[] = modelJson.weightsManifest[0].paths;
   const urlBase = url.substring(0, url.lastIndexOf('/') + 1);
   const fullPaths : string[] = weightPaths.map((p: string) => urlBase + p);
-  const fetchPromises = fullPaths.map((p: string) => f(p));
-  const responses : Response[] = await Promise.all(fetchPromises);
 
-  const sizes = responses.map((r: Response) => +r.headers.get('Content-Length'));
-  const totalSize = sizes.reduce((acc: number, cur: number) => acc + cur);
-  const playloadPromises = [];
-
-  // Inform consumers immediately.
-  progressCb(0, totalSize);
-  let totalReceived = 0;
-  for (let i = 0; i < sizes.length; ++i) {
-    playloadPromises.push(
-      ConsumeReaderWithProgress(
-        responses[i].body.getReader(), 
-        (numRec: number) => {
-          totalReceived += numRec;
-          progressCb(totalReceived, totalSize);
-        }
-      )
-    );
-  }
-  const payloads = await Promise.all(playloadPromises);
-
-  const blobs = new Map<string, Blob>();
-  // Cache chunks
-  for (let i = 0; i < sizes.length; ++i) {
-    blobs.set(fullPaths[i], new Blob([payloads[i]]));
-  }
-
-  // Cache model json
-  blobs.set(url, modelJsonBlob);
-
-  return {
-    blobs,
-  };
+  const res = await DownloadBlobs(fullPaths, progressCb);
+  // Need to include the model json that was downloaded beforehand.
+  res.blobs.set(url, modelJsonBlob);
+  return res;
 }
 
 /**
- * Creates a TFJS graph model from TFJS model files.
- * @param modelFiles - The model files from which to create a TFJS model.
+ * Creates a tfjs graph model from tfjs model files.
+ * @param modelBlobs - The model files from which to create a tfjs model.
  * @param backendType - What computational backend to use for creation of the model.
  */
-export async function CreateTfjsModelFromModelFiles(
-  modelFiles: ITfjsModelFiles,
+export async function CreateTfjsModelFromModelBlobs(
+  modelBlobs: IBlobs,
   backendType: TfjsBackendType
 ) : Promise<ITfjsModel> {
-  const cacheReadingFetchFunc = async (requestInfo: RequestInfo) => {
-    const resource = requestInfo.toString();
-
-    if (!modelFiles.blobs.has(resource)) {
-      throw `Requested URL ${resource} but that was not contained in modelFiles ` +
-            `(${Array.from(modelFiles.blobs.keys()).concat(', ')})`;
-    }
-    return new Response(modelFiles.blobs.get(resource), {
-      status: 200
-    });
-  };
+  const cacheReadingFetchFunc = CreateCacheReadingFetchFunc(modelBlobs);
   if (backendType === TfjsBackendType.WEBGL) {
     SetTfjsBackendToWebGl();
   }
-  const graphModel = await loadGraphModel(ExtractModelJsonUrlFromModelFiles(modelFiles), {
+  const graphModel = await loadGraphModel(ExtractModelJsonUrlFromModelBlobs(modelBlobs), {
     fetchFunc: cacheReadingFetchFunc
   });
   return {
@@ -223,39 +174,39 @@ export async function CreateTfjsModelFromModelFiles(
   };
 }
 
-function ExtractModelJsonUrlFromModelFiles(modelFiles: ITfjsModelFiles) {
+function ExtractModelJsonUrlFromModelBlobs(modelBlobs: IBlobs) {
   let url : string = null;
-  for (const k of modelFiles.blobs.keys()) {
+  for (const k of modelBlobs.blobs.keys()) {
     if (k.endsWith('model.json')) {
       if (url) {
-        throw 'modelFiles contained two model.json entries.';
+        throw 'modelBlobs contained two model.json entries.';
       }
       url = k;
     }
   }
   if (!url) {
-    throw 'modelFiles did not contain a model.json entry.';
+    throw 'modelBlobs did not contain a model.json entry.';
   }
   return url;
 }
 
 /**
- * Sets the TFJS webgl backend.
+ * Sets the tfjs webgl backend.
  */
 export async function SetTfjsBackendToWebGl() {
-  // TFJS has its own mechanism for determining whether webgl is available. In
+  // Tfjs has its own mechanism for determining whether webgl is available. In
   // particular they create a canvas with a webgl context and a custom set of
   // webgl attributes among which they use 'failIfMajorPerformanceCaveat' ===
   // true. This causes some browsers, in particular late versions of firefox, to
   // disable webgl if the browser determines that webgl would lead to similar or
   // worse performance than other contexts like software rendering. If this
-  // happens TFJS records that there is no WEBGL available (even though the
+  // happens tfjs records that there is no WEBGL available (even though the
   // browser supports it). It turned out that at least on firefox the heuristic
   // it uses to determine whether to disable webgl or not works poorly i.e.
   // webgl is disabled even though it would lead to incredible performance
   // improvements for us.
   //
-  // Thus we override TFJSs determination of whether webgl is available.
+  // Thus we override tfjs determination of whether webgl is available.
   tf.env().set('HAS_WEBGL', true);
   if (IsWebGLTwoAvailable()) {
     tf.env().set('WEBGL_VERSION', 2);
@@ -306,7 +257,7 @@ function DoesTfjsBackendTypeMatchCurrentlySetBackend(bt: TfjsBackendType) : bool
 }
 
 /**
- * Creates a model callback from a TFJS graph model and information about how the model
+ * Creates a model callback from a tfjs graph model and information about how the model
  * is to be invoked.
  * @param model - The graph model to create a callback for.
  * @param execAsync - Whether to execute the model asynchronously.
@@ -314,11 +265,11 @@ function DoesTfjsBackendTypeMatchCurrentlySetBackend(bt: TfjsBackendType) : bool
 export function CreateModelCbFromTfjsModel(model: ITfjsModel, execAsync: boolean) : IModelCb {
   return async (modelInput: IModelInput) : Promise<IModelResult> => {
     if (!DoesTfjsBackendTypeMatchCurrentlySetBackend(model.backendType)) {
-      console.warn('The TFJS model was created with backend ' + model.backendType + 
+      console.warn('The tfjs model was created with backend ' + model.backendType + 
         ' but the backend was switched to ' + GetCurrentTfjsBackend());
     }
     const t = CreateTensorFromModelInput(modelInput);
-    const tfjsRes  = <tf.Tensor<tf.Rank>[]>(model.model.execute(t));
+    const tfjsRes  = <tf.Tensor<tf.Rank>[]>(model.model.execute(t, ['coordinates', 'classes']));
     const coords = (<number[][][]>(
       execAsync ? (await tfjsRes[0].array()) : tfjsRes[0].arraySync()))[0];
     const classes = (<number[][][]>(
@@ -327,6 +278,7 @@ export function CreateModelCbFromTfjsModel(model: ITfjsModel, execAsync: boolean
     for (const resultTensor of tfjsRes) {
       resultTensor.dispose();
     }
+
     return {
       // need to convert coordinates from [-1,1] into range [0,1]
       coordinates: coords.map(c => [(c[0] + 1) / 2, (c[1] + 1) / 2]),
@@ -336,7 +288,7 @@ export function CreateModelCbFromTfjsModel(model: ITfjsModel, execAsync: boolean
   };
 }
 
-function CreateTensorFromModelInput(mi: IModelInput) {
+export function CreateTensorFromModelInput(mi: IModelInput) {
   let t : tf.Tensor;
   if (mi.type === ModelInputType.TRACK_SOURCE) {
     // Typescript complains here about offscreen canvas but it's fine to pass it.
@@ -347,9 +299,11 @@ function CreateTensorFromModelInput(mi: IModelInput) {
   } else {
     throw 'not implemented';
   }
-  const res = tf.reshape(t, [1, t.shape[0], t.shape[1], t.shape[2]]);
+  const reshaped = tf.reshape(t, [1, t.shape[0], t.shape[1], t.shape[2]]);
+  const casted = tf.cast(reshaped, 'float32');
+  reshaped.dispose();
   t.dispose();
-  return res;
+  return casted;
 }
 
 function CreateTensorFromTypedArrayInput(tai: ITypedArrayInput) {
@@ -375,31 +329,3 @@ export function GetInputDimensionsFromTfjsModel(model: ITfjsModel): number[] {
   return [dims[1], dims[2]];
 }
 
-async function ConsumeReaderWithProgress(
-  reader: ReadableStreamDefaultReader<Uint8Array>, 
-  cb: (progress: number) => void
-) {
-  // https://javascript.info/fetch-progress
-  let receivedLength = 0; // received that many bytes at the moment
-  const chunks = []; // array of received binary chunks (comprises the body)
-  while (true) {
-    const {done, value} = await reader.read();
-  
-    if (done) {
-      break;
-    }
-  
-    chunks.push(value);
-    receivedLength += value.length;
-    cb(value.length);
-  }
-  
-  // Step 4: concatenate chunks into single Uint8Array
-  const chunksAll = new Uint8Array(receivedLength); // (4.1)
-  let position = 0;
-  for(const chunk of chunks) {
-    chunksAll.set(chunk, position); // (4.2)
-    position += chunk.length;
-  }
-  return chunksAll;
-}

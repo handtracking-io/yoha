@@ -9,8 +9,8 @@ import {ITrackSource} from '../track_source';
 
 import {
   TfjsBackendType,
-  IYohaModelFiles,
-  CreateTfjsModelFromModelFiles,
+  IYohaTfjsModelBlobs,
+  CreateTfjsModelFromModelBlobs,
   CreateModelCbFromTfjsModel,
   GetInputDimensionsFromTfjsModel,
 } from '../model/tfjs';
@@ -32,15 +32,15 @@ import {
  *
  * @returns Promise that resolves with a callback that can be used to stop the analysis.
  */
-export async function StartWebGlEngine(
+export async function StartTfjsWebglEngine(
   config: IEngineConfig, 
   trackSource: ITrackSource, 
-  yohaModel: IYohaModelFiles,
+  yohaModels: IYohaTfjsModelBlobs,
   resCb: ITrackResultCb,
 ) : Promise<IStopEngineCb> {
   const [boxModel, lanModel] = await Promise.all([
-    CreateTfjsModelFromModelFiles(yohaModel.box, TfjsBackendType.WEBGL),  
-    CreateTfjsModelFromModelFiles(yohaModel.lan, TfjsBackendType.WEBGL),
+    CreateTfjsModelFromModelBlobs(yohaModels.box, TfjsBackendType.WEBGL),  
+    CreateTfjsModelFromModelBlobs(yohaModels.lan, TfjsBackendType.WEBGL),
   ]);
 
   const boxDims = GetInputDimensionsFromTfjsModel(boxModel);
