@@ -11,7 +11,7 @@ feel free to give feedback.
 Note that the demo is available for all supported backends. Each one has separate
 `*_entry.ts` file.
 
-Similarly there is a separate HTML file for each backend. E.g. `/tfjs_webgl_draw_.html`
+Similarly a separate HTML file is generated for each backend. E.g. `https://localhost:8090/tfjs_webgl_draw.html`
 
 # Running
 
