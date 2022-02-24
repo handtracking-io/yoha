@@ -41,7 +41,6 @@ module.exports = (env) => {
       })),
       new CopyWebpackPlugin({
         patterns: [
-          // FIXME these wildcards will load some unnecessary stuff right now
           {from: 'node_modules/@tensorflow/tfjs-backend-wasm/dist/*.wasm'},
           {from: 'models/lan', to: 'lan/'},
           {from: 'models/box', to: 'box/'},

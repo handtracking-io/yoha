@@ -13,6 +13,6 @@
     "webpack-dev-server": "^4.3.0"
   },
   "dependencies": {
-    "yoha": "../yoha-v0.0.18.tgz"
+    "@handtracking.io/yoha": "*"
   }
 }

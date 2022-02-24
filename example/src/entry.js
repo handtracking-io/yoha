@@ -3,12 +3,12 @@
  * The example creates a colored box that can be moved using hand movements. Performing
  * a pinch or fist gesture changes the color of the cursor.
  */
-import * as yoha from 'yoha';
+import * as yoha from '@handtracking.io/yoha';
 import {SetCursorColor, SetCursorPosition, SetCursorVisibility, InitializeCursor} from './cursor';
 
 async function Run() {
   // Download models.
-  const modelFiles = await yoha.DownloadYohaModelFiles(
+  const modelFiles = await yoha.DownloadMultipleYohaTfjsModelBlobs(
     '/box/model.json', 
     '/lan/model.json', 
     (rec, total) => {
@@ -27,10 +27,16 @@ async function Run() {
   }
   const video = yoha.CreateVideoElementFromStream(streamRes.stream);
 
+  // Note the 'wasmPath' argument. This has to be in sync with how you serve the respective
+  // files. See webpack.config.js for an example.
+  const wasmConfig = {
+    wasmPaths: './node_modules/@tensorflow/tfjs-backend-wasm/dist/'
+  };
+
   // Run engine.
   // We configure small padding to avoid that users move their hand outside webcam view
   // when trying to move the cursor towards the border of the viewport.
-  yoha.StartWebGlEngine({padding: 0.05}, video, modelFiles, res => {
+  yoha.StartTfjsWasmEngine({padding: 0.05}, wasmConfig, video, modelFiles, res => {
     if (!Math.round(res.isHandPresentProb)) {
       SetCursorVisibility(false);
       return;

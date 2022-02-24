@@ -37,7 +37,8 @@ module.exports = (env) => {
       }),
       new CopyWebpackPlugin({
         patterns: [
-          {from: 'node_modules/yoha/models/', to: './'},
+          {from: 'node_modules/@tensorflow/tfjs-backend-wasm/dist/*.wasm'},
+          {from: 'node_modules/@handtracking.io/yoha/models/', to: './'},
         ]
       })
     ],
