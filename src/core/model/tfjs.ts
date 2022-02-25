@@ -7,7 +7,7 @@ import {ApplyConfigDefaults} from '../../util/config_helper';
 import {IsWebglOneAvailable, IsWebglTwoAvailable} from '../../util/webgl_helper';
 import {
   IModelCb,
-  IModelDownloadProgressCb,
+  IDownloadProgressCb,
   IModelInput,
   ITypedArrayInput,
   ModelInputType,
@@ -107,7 +107,7 @@ export interface IYohaTfjsModelBlobs {
 export async function DownloadMultipleYohaTfjsModelBlobs(
   boxUrl: string, 
   lanUrl: string, 
-  progressCb: IModelDownloadProgressCb
+  progressCb: IDownloadProgressCb
 ) : Promise<IYohaTfjsModelBlobs> {
   return {
     ...await DownloadMultipleYohaModelBlobs(boxUrl, lanUrl, progressCb, DownloadTfjsModelBlobs),
@@ -124,7 +124,7 @@ export async function DownloadMultipleYohaTfjsModelBlobs(
  */
 export async function DownloadTfjsModelBlobs(
   urls: string[],
-  progressCb: IModelDownloadProgressCb
+  progressCb: IDownloadProgressCb
 ):
     Promise<IBlobs[]> {
   return DownloadMultipleModelBlobs(urls, progressCb, DownloadTfjsModel);
@@ -138,7 +138,7 @@ export async function DownloadTfjsModelBlobs(
  */
 export async function DownloadTfjsModel(
   url: string, 
-  progressCb: IModelDownloadProgressCb
+  progressCb: IDownloadProgressCb
 ) : Promise<IBlobs> {
   const f = tf.env().platform.fetch;
 

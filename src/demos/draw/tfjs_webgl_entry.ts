@@ -5,7 +5,7 @@
 import {
   DownloadMultipleYohaTfjsModelBlobs,
   StartTfjsWebglEngine,
-  IModelDownloadProgressCb,
+  IDownloadProgressCb,
   ITrackResultCb,
   ITrackSource,
   IEngineConfig,
@@ -17,7 +17,7 @@ async function Run() {
   CreateDrawDemo(async (
     src: ITrackSource, 
     config: IEngineConfig,
-    progressCb: IModelDownloadProgressCb, 
+    progressCb: IDownloadProgressCb, 
     resultCb: ITrackResultCb
   ) => {
     const modelBlobs = await DownloadMultipleYohaTfjsModelBlobs(

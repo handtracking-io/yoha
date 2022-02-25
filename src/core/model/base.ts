@@ -49,23 +49,24 @@ export interface IModelCb {
  * <b>total</b>: Number in range [0,INFINITY) that stays the same across invocations of the 
  * function.
  */
-export type IModelDownloadProgressCb = (received: number, total: number) => void
+export type IDownloadProgressCb = (received: number, total: number) => void
 
-export interface IModelDownloadProgressCbCreationFn {
-  (): IModelDownloadProgressCb
+export interface IDownloadProgressCbCreationFn {
+  (): IDownloadProgressCb
 }
 
 /**
- * Creates a way to combine the progress of multiple downloads.
- * Returns a function that should be called for each download. It returns
- * {@link IModelDownloadProgressCb} which should be passed in to functions that report the
- * download progress of an individual download.
- * The total/combined progress is reported via {@link combinedProgressCb}.
- * @param combinedProgressCb Callback that reports total download progress.
+ * This function can be used to track the overall download progress of multiple downloads.
+ *
+ * Functions that report download progress do so via a {@link IDownloadProgressCb}
+ * argument. This function here also takes such a parameter but uses it to report the overall 
+ * download progress. Further it returns a callback that, when called, returns a 
+ * {@link IDownloadProgressCb} that should be used for one of the downloads.
+ * @param combinedProgressCb Callback to report combined download progress.
  */
-export function CreateSimultaneousDownloadProgressCb(
-  combinedProgressCb: IModelDownloadProgressCb
-) : IModelDownloadProgressCbCreationFn {
+export function CreateProgressCbCreationCbForMultipleDownloads(
+  combinedProgressCb: IDownloadProgressCb
+) : IDownloadProgressCbCreationFn {
   let totalReceived = 0;
   let totalSize = 0;
   return () => {
@@ -120,14 +121,14 @@ export async function ReadStreamWithProgress(
  * Callback that downloads a model and reports download progress.
  */
 interface IDownloadModelCb {
-  (url: string, progressCb: IModelDownloadProgressCb) : Promise<IBlobs>
+  (url: string, progressCb: IDownloadProgressCb) : Promise<IBlobs>
 }
 
 /**
- * Callback that multiple models and reports total download progress.
+ * Callback that downloads multiple models and reports total download progress.
  */
 interface IDownloadModelsCb {
-  (urls: string[], progressCb: IModelDownloadProgressCb) : Promise<IBlobs[]>
+  (urls: string[], progressCb: IDownloadProgressCb) : Promise<IBlobs[]>
 }
 
 /**
@@ -152,8 +153,8 @@ export interface IBlobs {
 /**
  * @public
  * Downloads Yoha models.
- * @param boxUrl - Url to box model. Must be understood by {@link downloadModelsCb}.
- * @param lanUrl - Url to model.json file of landmark model. Must be understood 
+ * @param boxUrl - Url to model.json of box model. Must be understood by {@link downloadModelsCb}.
+ * @param lanUrl - Url to model.json of landmark model. Must be understood 
  *                 by {@link downloadModelsCb}.
  * @param progressCb - A callback that is called with the cumulative download progress for all
  *                     models.
@@ -162,7 +163,7 @@ export interface IBlobs {
 export async function DownloadMultipleYohaModelBlobs(
   boxUrl: string, 
   lanUrl: string, 
-  progressCb: IModelDownloadProgressCb,
+  progressCb: IDownloadProgressCb,
   downloadModelsCb: IDownloadModelsCb
 ) : Promise<IYohaModelBlobs> {
   const modelBlobs = await downloadModelsCb([boxUrl, lanUrl], progressCb);
@@ -181,11 +182,11 @@ export async function DownloadMultipleYohaModelBlobs(
  */
 export async function DownloadMultipleModelBlobs(
   urls: string[],
-  progressCb: IModelDownloadProgressCb,
+  progressCb: IDownloadProgressCb,
   downloadModelCb: IDownloadModelCb
 ): Promise<IBlobs[]> {
   const promises = [];
-  const createModelProgressCb = CreateSimultaneousDownloadProgressCb(progressCb);
+  const createModelProgressCb = CreateProgressCbCreationCbForMultipleDownloads(progressCb);
   for (const url of urls) {
     promises.push(downloadModelCb(url, createModelProgressCb()));
   }
@@ -200,7 +201,7 @@ export async function DownloadMultipleModelBlobs(
  */
 export async function DownloadBlobs(
   urls: string[], 
-  progressCb: IModelDownloadProgressCb
+  progressCb: IDownloadProgressCb
 ) : Promise<IBlobs> {
   const fetchPromises = urls.map((u: string) => fetch(u));
   const responses : Response[] = await Promise.all(fetchPromises);

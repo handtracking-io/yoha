@@ -9,7 +9,7 @@ Downloads the Yoha tfjs models.
 <b>Signature:</b>
 
 ```typescript
-export declare function DownloadMultipleYohaTfjsModelBlobs(boxUrl: string, lanUrl: string, progressCb: IModelDownloadProgressCb): Promise<IYohaTfjsModelBlobs>;
+export declare function DownloadMultipleYohaTfjsModelBlobs(boxUrl: string, lanUrl: string, progressCb: IDownloadProgressCb): Promise<IYohaTfjsModelBlobs>;
 ```
 
 ## Parameters
@@ -18,7 +18,7 @@ export declare function DownloadMultipleYohaTfjsModelBlobs(boxUrl: string, lanUr
 |  --- | --- | --- |
 |  boxUrl | string | Url to model.json file of box model. |
 |  lanUrl | string | Url to model.json file of landmark model. |
-|  progressCb | [IModelDownloadProgressCb](./yoha.imodeldownloadprogresscb.md) | A callback that is called with the cumulative download progress for all models. |
+|  progressCb | [IDownloadProgressCb](./yoha.idownloadprogresscb.md) | A callback that is called with the cumulative download progress for all models. |
 
 <b>Returns:</b>
 

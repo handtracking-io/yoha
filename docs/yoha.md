@@ -41,7 +41,7 @@ Yoha hand tracking library for precision interactions.
 
 |  Type Alias | Description |
 |  --- | --- |
-|  [IModelDownloadProgressCb](./yoha.imodeldownloadprogresscb.md) | Callback that periodically informs about download progress. |
+|  [IDownloadProgressCb](./yoha.idownloadprogresscb.md) | Callback that periodically informs about download progress. |
 |  [ITrackResultCb](./yoha.itrackresultcb.md) | Result callback. |
 |  [ITrackSource](./yoha.itracksource.md) | The element to be used as source for the handtracking. Usually this is a <code>&lt;video&gt;</code> element. |
 |  [ObjValues](./yoha.objvalues.md) | A small helper that is used to build a type consisting of all values of an object literal.<br/> |

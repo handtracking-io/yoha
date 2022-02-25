@@ -16,12 +16,15 @@ export function CreateMaxFpsMaxResStream(): Promise<IMediaStreamResult>;
 export function CreateVideoElementFromStream(stream: MediaStream): HTMLVideoElement;
 
 // @public
-export function DownloadMultipleYohaTfjsModelBlobs(boxUrl: string, lanUrl: string, progressCb: IModelDownloadProgressCb): Promise<IYohaTfjsModelBlobs>;
+export function DownloadMultipleYohaTfjsModelBlobs(boxUrl: string, lanUrl: string, progressCb: IDownloadProgressCb): Promise<IYohaTfjsModelBlobs>;
 
 // @public
 export interface IBlobs {
     blobs: Map<string, Blob>;
 }
+
+// @public
+export type IDownloadProgressCb = (received: number, total: number) => void;
 
 // @public
 export interface IEngineConfig {
@@ -37,9 +40,6 @@ export interface IMediaStreamResult {
     error?: ObjValues<typeof MediaStreamErrorEnum>;
     stream?: MediaStream;
 }
-
-// @public
-export type IModelDownloadProgressCb = (received: number, total: number) => void;
 
 // @public
 export interface IPoseProbabilities {

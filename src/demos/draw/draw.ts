@@ -13,7 +13,7 @@ import {
   CreateMaxFpsMaxResStream,
   MediaStreamErrorEnum, 
   CreateVideoElementFromStream,
-  IModelDownloadProgressCb,
+  IDownloadProgressCb,
   ITrackResultCb,
   ITrackSource,
   IEngineConfig,
@@ -46,7 +46,7 @@ interface IDownloadAndStartEngineCb {
   (
     src: ITrackSource,
     config: IEngineConfig,
-    progressCb: IModelDownloadProgressCb, 
+    progressCb: IDownloadProgressCb, 
     resultCb: ITrackResultCb
   ) : void
 }

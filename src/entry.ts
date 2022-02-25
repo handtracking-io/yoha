@@ -20,7 +20,7 @@ export {
   ITfjsWasmBackendConfig,
 } from './core/model/tfjs';
 export {
-  IModelDownloadProgressCb, 
+  IDownloadProgressCb, 
   IBlobs,
 } from './core/model/base';
 
