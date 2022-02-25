@@ -25,7 +25,6 @@ export function SetCursorColor(color) {
 }
 
 export function SetCursorPosition(left, top) {
-  console.log(window.innerHeight * top + 'px');
   cursor.style.top = window.innerHeight * top + 'px';
   cursor.style.left = window.innerWidth * left + 'px';
 }
