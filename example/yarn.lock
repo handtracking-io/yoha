@@ -8,9 +8,9 @@
   integrity sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==
 
 "@handtracking.io/yoha@*":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@handtracking.io/yoha/-/yoha-1.1.2.tgz#2c4ee3abaa5a8052f13e93b56728087ae8a69a8a"
-  integrity sha512-ogzb2akw6cEyhkR9H1cdtvAzuN+NC0ZXT7oYPKxoLLb3XFGQdjCm8A+u50JxGm9I8WyR2moIK8LImYdklihMyQ==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@handtracking.io/yoha/-/yoha-1.2.0.tgz#d9c3ec637067dca9d5cea57b8d7fa59ec80509da"
+  integrity sha512-2ETeQG1U3tlxuR0RIJhCkgh/K2czMSwNdNOfyt8aJc3GI7/RM7sA9KwA30NuMFnvxw0Jgeh8F978mpnrWSoTfQ==
   dependencies:
     "@tensorflow/tfjs-backend-wasm" "^3.13.0"
     "@tensorflow/tfjs-backend-webgl" "^3.12.0"
