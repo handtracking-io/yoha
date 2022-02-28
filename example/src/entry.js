@@ -4,7 +4,7 @@
  * a pinch or fist gesture changes the color of the cursor.
  */
 import * as yoha from '@handtracking.io/yoha';
-import {SetCursorColor, SetCursorPosition, SetCursorVisibility, InitializeCursor} from './cursor';
+import { SetCursorColor, SetCursorPosition, SetCursorVisibility, InitializeCursor } from './cursor';
 
 async function Run() {
   // Download models.
@@ -33,20 +33,22 @@ async function Run() {
     wasmPaths: './node_modules/@tensorflow/tfjs-backend-wasm/dist/'
   };
 
+  const thresholds = yoha.RecommendedHandPoseProbabilityThresholds;
+
   // Run engine.
   // We configure small padding to avoid that users move their hand outside webcam view
   // when trying to move the cursor towards the border of the viewport.
   yoha.StartTfjsWasmEngine({padding: 0.05}, wasmConfig, video, modelFiles, res => {
-    if (!Math.round(res.isHandPresentProb)) {
+    if (res.isHandPresentProb < thresholds.IS_HAND_PRESENT) {
       SetCursorVisibility(false);
       return;
     }
     SetCursorVisibility(true);
 
     // Change color depending on gesture.
-    if (Math.round(res.poses.fistProb)) {
+    if (res.poses.fistProb > thresholds.FIST) {
       SetCursorColor('red');
-    } else if (Math.round(res.poses.pinchProb)) {
+    } else if (res.poses.pinchProb > thresholds.PINCH) {
       SetCursorColor('green');
     } else {
       SetCursorColor('blue');
