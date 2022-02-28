@@ -36,6 +36,7 @@ Yoha hand tracking library for precision interactions.
 |  Variable | Description |
 |  --- | --- |
 |  [MediaStreamErrorEnum](./yoha.mediastreamerrorenum.md) | Possible error types that can occur when calling navigator.mediaDevices.getUserMedia. |
+|  [RecommendedHandPoseProbabilityThresholds](./yoha.recommendedhandposeprobabilitythresholds.md) | Recommended thresholds for probabilities reported in [IPoseProbabilities](./yoha.iposeprobabilities.md)<!-- -->, [ITrackResult.isLeftHandProb](./yoha.itrackresult.islefthandprob.md) and [ITrackResult.isHandPresentProb](./yoha.itrackresult.ishandpresentprob.md)<!-- -->. |
 
 ## Type Aliases
 

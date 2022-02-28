@@ -97,6 +97,14 @@ export function MirrorCoordinatesHorizontally(coords: number[][]): number[][];
 export type ObjValues<T> = T[keyof T];
 
 // @public
+export const RecommendedHandPoseProbabilityThresholds: {
+    PINCH: number;
+    FIST: number;
+    IS_HAND_PRESENT: number;
+    IS_LEFT_HAND: number;
+};
+
+// @public
 export function StartTfjsWasmEngine(engineConfig: IEngineConfig, backendConfig: ITfjsWasmBackendConfig, trackSource: ITrackSource, yohaModels: IYohaTfjsModelBlobs, resCb: ITrackResultCb): Promise<IStopEngineCb>;
 
 // @public

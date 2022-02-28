@@ -29,6 +29,7 @@ export {
   IPoseProbabilities, 
   MirrorCoordinatesHorizontally, 
   ApplyPaddingToCoordinates, 
+  RecommendedHandPoseProbabilityThresholds,
 } from './core/post_model/post_model';
 
 export {
