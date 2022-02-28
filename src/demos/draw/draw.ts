@@ -17,6 +17,7 @@ import {
   ITrackResultCb,
   ITrackSource,
   IEngineConfig,
+  RecommendedHandPoseProbabilityThresholds,
 } from '../../entry';
 
 /**
@@ -110,24 +111,25 @@ export async function CreateDrawDemo(startCb: IDownloadAndStartEngineCb) {
   // (Setting the parameter to 1 disables the smoothing if you'd like to try without it.)
   const pos = new ExponentialCoordinateAverage(0.85);
 
+  const thresholds = RecommendedHandPoseProbabilityThresholds;
+
   // StartTfliteEngine(config, src, models, e => {
   startCb(src, config, progressCb, e => {
     fpsLayer.RegisterCall();
-    // console.log(e.isHandPresentProb);
-    if (Math.round(e.isHandPresentProb)) {
+    if (e.isHandPresentProb > thresholds.IS_HAND_PRESENT) {
       const cursorPos = pos.Add(ComputeCursorPositionFromCoordinates(e.coordinates));
 
       pointLayer.DrawPoint(cursorPos[0], cursorPos[1]);
       pointLayer.Render();
 
-      if (Math.round(e.poses.pinchProb)) {
+      if (e.poses.pinchProb > thresholds.PINCH) {
         pathLayer.AddNode(cursorPos[0], cursorPos[1]);
         pathLayer.Render();
       } else {
         pathLayer.EndPath();
       }
 
-      if (Math.round(e.poses.fistProb)) {
+      if (e.poses.fistProb > thresholds.FIST) {
         pathLayer.Clear();
         pathLayer.Render();
       }
@@ -179,7 +181,6 @@ function CreateLayerStack(video: HTMLVideoElement, width: number, height: number
     outline: '2px solid white'
   });
 
-  // const videoLayer : HTMLVideoElement = null;
   const videoLayer = new VideoLayer({
     width,
     height,

@@ -23,6 +23,23 @@ export interface IPoseProbabilities {
   fistProb: number
 }
 
+
+const RECOMMENDED_CLASSIFIER_THRESHOLDS = {
+  PINCH: 0.2,
+  FIST: 0.5,
+  IS_HAND_PRESENT: 0.5,
+  IS_LEFT_HAND: 0.5,
+};
+/**
+ * @public
+ * Recommended thresholds for probabilities reported in {@link IPoseProbabilities}, 
+ * {@link ITrackResult.isLeftHandProb} and {@link ITrackResult.isHandPresentProb}.
+ * @privateRemarks
+ * These thresholds are an optimization. Math.round(probability) works fine in general.
+ * The thresholds have been determined empirically.
+ */
+export const RecommendedHandPoseProbabilityThresholds = RECOMMENDED_CLASSIFIER_THRESHOLDS;
+
 /**
  * @public
  *
