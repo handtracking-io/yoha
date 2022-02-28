@@ -8,9 +8,9 @@
   integrity sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==
 
 "@handtracking.io/yoha@*":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@handtracking.io/yoha/-/yoha-1.1.1.tgz#e6175671c99d6915ef3d0b75f6067402ac94fc57"
-  integrity sha512-vt0jeTTgDW9OtDG2ThYXJJ8rFXPXsV5x2vSRTEQGpqqw30uHOzc1XWuFkG6B58U3rVOxq0hr0gVNyk98RxH2BQ==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@handtracking.io/yoha/-/yoha-1.1.2.tgz#2c4ee3abaa5a8052f13e93b56728087ae8a69a8a"
+  integrity sha512-ogzb2akw6cEyhkR9H1cdtvAzuN+NC0ZXT7oYPKxoLLb3XFGQdjCm8A+u50JxGm9I8WyR2moIK8LImYdklihMyQ==
   dependencies:
     "@tensorflow/tfjs-backend-wasm" "^3.13.0"
     "@tensorflow/tfjs-backend-webgl" "^3.12.0"
@@ -952,9 +952,9 @@ encodeurl@~1.0.2:
   integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
 
 enhanced-resolve@^5.8.3:
-  version "5.9.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.9.0.tgz#49ac24953ac8452ed8fed2ef1340fc8e043667ee"
-  integrity sha512-weDYmzbBygL7HzGGS26M3hGQx68vehdEg6VUmqSOaFzXExFqlnKuSvsEJCVGQHScS8CQMbrAqftT+AzzHNt/YA==
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.9.1.tgz#e898cea44d9199fd92137496cff5691b910fb43e"
+  integrity sha512-jdyZMwCQ5Oj4c5+BTnkxPgDZO/BJzh/ADDmKebayyzNwjVX1AFCeGkOfxNx0mHi2+8BKC5VxUYiw3TIvoT7vhw==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
