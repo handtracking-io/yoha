@@ -5,7 +5,9 @@
   <br>
 </h1>
 <h4 align="center">A practical hand tracking engine. </h4>
-<br>
+<h2 align="center">
+Note: Yoha is currently unmaintained.
+</h2>
 
 <img src="https://user-images.githubusercontent.com/7460509/136609045-827ec14b-a94a-4477-b064-b1c9488754f6.gif"></img>
 
@@ -16,7 +18,6 @@
   <li><a href="https://handtracking.io/draw_demo" target="_blank">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
   <li><a href="https://github.com/handtracking-io/yoha/tree/master/docs">Docs</a></li>
   <li><a href="https://handtracking.io">Website</a></li>
-  <li><a href="https://join.slack.com/t/handtrackingio/shared_invite/zt-x4y5rbls-6_1IDAlndbXvIoaWZqcLIA">Slack</a></li>
   <li><a href="https://www.npmjs.com/package/@handtracking.io/yoha">npm</a></li>
 </ul>
 
@@ -112,6 +113,5 @@ yarn start
 ```
 
 ## Contact:
-- <a href="mailto:benjamin@handtracking.io">benjamin@handtracking.io</a>
-- <a href="https://join.slack.com/t/handtrackingio/shared_invite/zt-x4y5rbls-6_1IDAlndbXvIoaWZqcLIA">Slack</a>
+- <a href="mailto:benjamin@handtracking.io">benjamin@handtracking.io</a> (Read infrequently)
 
