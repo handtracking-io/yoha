@@ -112,6 +112,3 @@ yarn && \
 yarn start
 ```
 
-## Contact:
-- <a href="mailto:benjamin@handtracking.io">benjamin@handtracking.io</a> (Read infrequently)
-
