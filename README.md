@@ -15,7 +15,7 @@ Note: Yoha is currently unmaintained.
   Quick Links:
 </h2>
 <ul>
-  <li><a href="https://handtracking.io/draw_demo" target="_blank">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
+  <li><a href="https://handtracking-io.github.io/yoha/draw_demo" target="_blank">Demo</a> <a href="https://github.com/handtracking-io/yoha/blob/master/src/demos/draw/entry.ts">(Code)</a></li>
   <li><a href="https://github.com/handtracking-io/yoha/tree/master/docs">Docs</a></li>
   <li><a href="https://handtracking.io">Website</a></li>
   <li><a href="https://www.npmjs.com/package/@handtracking.io/yoha">npm</a></li>
@@ -39,7 +39,7 @@ an application. While ultimately the goal is to be a general purpose hand
 tracking engine supporting any hand pose, the engine evolves
 around specific hand poses that users/developers find useful. These poses 
 are detected by the engine which allows to build applications with meaningful interactions. 
-See the <a href="https://handtracking.io/draw_demo" target="_blank">demo</a> for an example.
+See the <a href="https://handtracking-io.github.io/yoha/draw_demo" target="_blank">demo</a> for an example.
 
 Yoha is currently in beta.
 
@@ -101,7 +101,7 @@ yarn start
 
 ## Drawing Demo
 
-- [Live Version](https://handtracking.io/draw_demo)
+- [Live Version](https://handtracking-io.github.io/yoha/draw_demo)
 - [Source](https://github.com/handtracking-io/yoha/tree/main/src/demos/draw)
 - Running locally:
 ```
